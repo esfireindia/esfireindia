@@ -1,6 +1,6 @@
 import { ArrowUpRight, Camera, Menu, X } from 'lucide-react';
 import { PropsWithChildren, useEffect, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { whatsappBase } from '../data/products';
 
 const navItems = [
@@ -36,6 +36,7 @@ export function ArrowLink({
 
 function Header() {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
   return (
     <header className="site-header shell">
       <Link to="/" className="brand" aria-label="ESFIRE INDIA home">
@@ -43,11 +44,14 @@ function Header() {
         <span>ESFIRE <em>INDIA</em></span>
       </Link>
       <nav className={`main-nav${open ? ' is-open' : ''}`} aria-label="Primary navigation">
-        {navItems.map(([label, path]) => (
-          <NavLink key={path} to={path} end={path === '/'} onClick={() => setOpen(false)}>
-            {label}
-          </NavLink>
-        ))}
+        {navItems.map(([label, path]) => {
+          const isActive = path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
+          return (
+            <span key={path} className={`nav-static${isActive ? ' active' : ''}`} aria-disabled="true">
+              {label}
+            </span>
+          );
+        })}
         <a className="mobile-quote" href={whatsappBase} target="_blank" rel="noreferrer">
           Get a quote <ArrowUpRight size={15} />
         </a>
