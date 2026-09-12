@@ -1,20 +1,4 @@
-export type ProductCategory = 'Tandoor' | 'Fire Stove' | 'Bonfire' | 'Rocket Stove';
-
-export type Product = {
-  slug: string;
-  number: string;
-  eyebrow: string;
-  category: ProductCategory;
-  name: string;
-  cardCopy: string;
-  description: string;
-  image: string;
-  alternateImage: string;
-  applications: string[];
-  specs: Array<[string, string]>;
-};
-
-export const products: Product[] = [
+export const products = [
   {
     slug: 'fireview-tandoor',
     number: '01',
@@ -116,18 +100,68 @@ export const whatsappBase =
   "https://wa.me/919876543210?text=Hi%20ES%20Fire%20India%2C%20I'm%20interested%20in%20your%20fire%20products.%20Please%20share%20more%20details.";
 
 export const applicationOptions = [
-  { label: 'Home', copy: 'A room with a pulse.', image: '/assets/fireview.avif', slug: 'fireview-tandoor' },
-  { label: 'Backyard', copy: 'The evening starts here.', image: '/assets/bonfire.avif', slug: 'smokeless-bonfire-18' },
-  { label: 'Outdoors', copy: 'Take the warmth with you.', image: '/assets/bonfire-alt.avif', slug: 'smokeless-bonfire-18' },
-  { label: 'Cooking', copy: 'Heat becomes ritual.', image: '/assets/classic-tandoor.avif', slug: 'classic-home-tandoor' },
-  { label: 'Camping', copy: 'Pack light. Burn bright.', image: '/assets/rocket-stove.avif', slug: 'flatpack-rocket-stove' },
-  { label: 'Hospitality', copy: 'Give people a reason to stay.', image: '/assets/compact-fire.avif', slug: 'new-model-10x13-glass' },
+  {
+    label: 'Home',
+    copy: 'A room with a pulse.',
+    image: '/assets/fireview.avif',
+    slug: 'fireview-tandoor',
+  },
+  {
+    label: 'Backyard',
+    copy: 'The evening starts here.',
+    image: '/assets/bonfire.avif',
+    slug: 'smokeless-bonfire-18',
+  },
+  {
+    label: 'Outdoors',
+    copy: 'Take the warmth with you.',
+    image: '/assets/bonfire-alt.avif',
+    slug: 'smokeless-bonfire-18',
+  },
+  {
+    label: 'Cooking',
+    copy: 'Heat becomes ritual.',
+    image: '/assets/classic-tandoor.avif',
+    slug: 'classic-home-tandoor',
+  },
+  {
+    label: 'Camping',
+    copy: 'Pack light. Burn bright.',
+    image: '/assets/rocket-stove.avif',
+    slug: 'flatpack-rocket-stove',
+  },
+  {
+    label: 'Hospitality',
+    copy: 'Give people a reason to stay.',
+    image: '/assets/compact-fire.avif',
+    slug: 'new-model-10x13-glass',
+  },
 ];
 
 export const finderOptions = [
-  { label: 'I want to cook', copy: 'Bring ritual and heat to the table.', slug: 'classic-home-tandoor' },
-  { label: 'I want to heat', copy: 'A considered flame for indoor spaces.', slug: 'fireview-tandoor' },
-  { label: 'I want to gather', copy: 'Make the fire the meeting point.', slug: 'smokeless-bonfire-18' },
-  { label: 'I want to travel', copy: 'Fire that moves with your plans.', slug: 'flatpack-rocket-stove' },
-  { label: 'I want an outdoor fire', copy: 'Long evenings, open air, real flame.', slug: 'smokeless-bonfire-18' },
+  {
+    label: 'I want to cook',
+    copy: 'Bring ritual and heat to the table.',
+    slug: 'classic-home-tandoor',
+  },
+  {
+    label: 'I want to heat',
+    copy: 'A considered flame for indoor spaces.',
+    slug: 'fireview-tandoor',
+  },
+  {
+    label: 'I want to gather',
+    copy: 'Make the fire the meeting point.',
+    slug: 'smokeless-bonfire-18',
+  },
+  {
+    label: 'I want to travel',
+    copy: 'Fire that moves with your plans.',
+    slug: 'flatpack-rocket-stove',
+  },
+  {
+    label: 'I want an outdoor fire',
+    copy: 'Long evenings, open air, real flame.',
+    slug: 'smokeless-bonfire-18',
+  },
 ];

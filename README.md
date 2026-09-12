@@ -2,6 +2,20 @@
 
 A responsive multi-page recreation of the ESFIRE INDIA fire-product website.
 
+## Stack
+
+- React with JavaScript and JSX
+- Node.js and Express
+- MongoDB with Mongoose
+- Vite for the frontend build
+
+## Source structure
+
+- `src/pages` contains route-level pages.
+- `src/components` contains reusable layout, home, product, section, and UI components.
+- `src/data` contains the product catalogue and shared content.
+- `server` contains the Express API and MongoDB models.
+
 ## Run locally
 
 1. Copy `.env.example` to `.env` and set `MONGODB_URI` if you want enquiries persisted in MongoDB.
