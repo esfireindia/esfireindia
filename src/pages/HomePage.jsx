@@ -1,6 +1,6 @@
 import { EngineeringDiagram } from '../components/home/EngineeringDiagram';
 import { FireFinder } from '../components/home/FireFinder';
-import { ProductCard } from '../components/product/ProductCard';
+import { HorizontalCollection } from '../components/home/HorizontalCollection';
 import { CallToAction } from '../components/sections/CallToAction';
 import { ArrowLink } from '../components/ui/ArrowLink';
 import { Preloader } from '../components/ui/Preloader';
@@ -26,7 +26,7 @@ export function HomePage() {
         <div className="hero-copy shell">
           <span className="kicker">ESFIRE INDIA / 001 — EST. FOR FIRE</span>
           <h1>
-            Where fire <em>meets</em> engineering.
+            Where <em>fire</em> meets engineering.
           </h1>
           <p>
             Premium tandoors, fire stoves, smokeless fire pits and outdoor fire solutions —
@@ -81,30 +81,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="collection-section shell">
-        <div className="section-heading collection-heading">
-          <div>
-            <span className="section-index">03</span>
-            <span className="kicker">THE COLLECTION</span>
-            <h2>
-              Purpose-built products.
-              <br />
-              Raw fire. <em>Refined engineering.</em>
-            </h2>
-          </div>
-          <p>A small, focused collection of fire products for inside, outside, and everywhere in between.</p>
-        </div>
-        <div className="featured-products">
-          {featured.map((product) => (
-            <ProductCard product={product} compact key={product.slug} />
-          ))}
-        </div>
-        <div className="center-link">
-          <ArrowLink to="/products" outline>
-            VIEW THE FULL COLLECTION
-          </ArrowLink>
-        </div>
-      </section>
+      <HorizontalCollection products={featured} />
 
       <EngineeringDiagram />
 

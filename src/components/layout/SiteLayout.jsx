@@ -1,5 +1,5 @@
 import { ArrowUpRight, Camera, Menu, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { whatsappBase } from '../../data/products';
 
@@ -14,11 +14,53 @@ const navItems = [
 
 function Header() {
   const [open, setOpen] = useState(false);
+  const [isScrollVisible, setIsScrollVisible] = useState(false);
+  const lastScrollY = useRef(0);
   const location = useLocation();
   const isHome = location.pathname === '/';
 
+  useEffect(() => {
+    lastScrollY.current = window.scrollY;
+    let frameId = null;
+
+    const updateHeader = () => {
+      const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollY.current;
+
+      if (currentScrollY <= 90) {
+        setIsScrollVisible(false);
+        lastScrollY.current = currentScrollY;
+      } else if (delta <= -4) {
+        setIsScrollVisible(true);
+        lastScrollY.current = currentScrollY;
+      } else if (delta >= 4) {
+        setIsScrollVisible(false);
+        setOpen(false);
+        lastScrollY.current = currentScrollY;
+      }
+
+      frameId = null;
+    };
+
+    const requestUpdate = () => {
+      if (frameId !== null) return;
+      frameId = window.requestAnimationFrame(updateHeader);
+    };
+
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', requestUpdate);
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+    };
+  }, []);
+
   return (
-    <header className={`site-header shell${isHome ? ' site-header--hero' : ''}`}>
+    <header
+      className={`site-header shell${isHome ? ' site-header--hero' : ''}${
+        isScrollVisible ? ' is-scroll-visible' : ''
+      }`}
+    >
       <Link to="/" className="brand" aria-label="ESFIRE INDIA home">
         <span className="brand-mark">E</span>
         <span>
