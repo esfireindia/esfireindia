@@ -41,10 +41,14 @@ export function HomePage() {
             </ArrowLink>
           </div>
         </div>
-        <div className="hero-foot shell">
-          <span>SCROLL TO EXPLORE</span>
-          <span>FIREVIEW / GLASS-FRONT &nbsp; 01 — 05</span>
-          <span>JALANDHAR / PUNJAB / INDIA</span>
+        <div className="hero-foot shell" aria-hidden="true">
+          <span className="hero-edge-label hero-edge-label--left">
+            <span>FIREVIEW / GLASS-FRONT &nbsp; 01 — 05</span>
+          </span>
+          <span className="hero-scroll-label">SCROLL TO EXPLORE</span>
+          <span className="hero-edge-label hero-edge-label--right">
+            <span>JALANDHAR / PUNJAB / INDIA</span>
+          </span>
         </div>
       </section>
 
