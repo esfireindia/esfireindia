@@ -76,12 +76,11 @@ h1 em, h2 em { color: var(--orange); font-style: normal; }
 .hero-copy .arrow-link--light.arrow-link--outline:hover { background: rgba(229,87,11,.82); border-color: rgba(255,132,65,.9); }
 .hero-foot { position: absolute; inset-block: 0; left: 50%; z-index: 3; color: rgba(255,255,255,.64); font: 500 .58rem JetBrains, monospace; letter-spacing: .15em; pointer-events: none; transform: translateX(-50%); }
 .hero-scroll-label { position: absolute; left: 50%; bottom: 28px; white-space: nowrap; transform: translateX(-50%); }
-.hero-edge-label { position: absolute; top: 50%; width: 0; height: 0; display: grid; place-items: center; }
-.hero-edge-label > span { display: block; white-space: nowrap; }
-.hero-edge-label--left { left: 0; }
-.hero-edge-label--left > span { transform: rotate(-90deg); }
+.hero-edge-label { position: absolute; bottom: 3.5%; display: block; }
+.hero-edge-label > span { display: block; white-space: nowrap; writing-mode: vertical-rl; text-orientation: mixed; }
+.hero-edge-label--left { left: 12px; }
+.hero-edge-label--left > span { transform: rotate(180deg); }
 .hero-edge-label--right { right: 0; }
-.hero-edge-label--right > span { transform: rotate(90deg); }
 
 .reason-section, .collection-section, .finder, .sequence { padding-block: 120px; }
 .section-heading { margin-bottom: 55px; }
@@ -334,7 +333,7 @@ h1 em, h2 em { color: var(--orange); font-style: normal; }
   .hero h1 { font-size: clamp(4.2rem, 14vw, 7rem); }
   .hero-visual { inset: 0; width: 100%; margin: 0; }
   .hero-scroll-label { bottom: 24px; }
-  .hero-edge-label { font-size: .52rem; }
+  .hero-edge-label { bottom: 5%; font-size: .52rem; }
   .reason-section, .collection-section, .finder, .sequence { padding-block: 85px; }
   .split-heading, .collection-heading, .engineering-grid, .finder-heading, .cta-inner, .products-hero > div, .spec-inner, .sequence-heading { grid-template-columns: 1fr; }
   .section-heading > p { margin-top: 25px; }
@@ -378,7 +377,9 @@ h1 em, h2 em { color: var(--orange); font-style: normal; }
   .hero h1 em { padding-left: 0; }
   .hero-copy > p { max-width: 34rem; font-size: .94rem; line-height: 1.65; }
   .hero-visual { width: 100%; }
-  .hero-edge-label { font-size: .49rem; letter-spacing: .13em; }
+  .hero-edge-label { bottom: 6%; font-size: .49rem; letter-spacing: .13em; }
+  .hero-edge-label--left { left: 4px; }
+  .hero-edge-label--right { right: 4px; }
   .section-index { float: none; margin-bottom: 20px; }
   .section-heading h2, .engineering-copy h2, .finder-heading h2, .sequence-heading h2 { font-size: 3.6rem; }
   .reason-grid { grid-template-columns: 1fr; }

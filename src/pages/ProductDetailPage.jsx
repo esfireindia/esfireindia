@@ -2,7 +2,7 @@ import { ArrowLeft, Check } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLink } from '../components/ui/ArrowLink';
-import { products } from '../data/products';
+import { createWhatsAppUrl, products } from '../data/products';
 import { NotFoundPage } from './NotFoundPage';
 
 export function ProductDetailPage() {
@@ -13,9 +13,9 @@ export function ProductDetailPage() {
   if (!product) return <NotFoundPage />;
 
   const images = [product.image, product.alternateImage];
-  const whatsApp = `https://wa.me/919876543210?text=${encodeURIComponent(
+  const whatsApp = createWhatsAppUrl(
     `Hi ES Fire India, I'm interested in ${product.name}. Please share more details.`,
-  )}`;
+  );
 
   return (
     <>

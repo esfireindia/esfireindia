@@ -1,7 +1,7 @@
 import { ArrowUpRight, Check, Flame, Mail, Phone } from 'lucide-react';
 import { useState } from 'react';
 import { PageIntro } from '../components/ui/PageIntro';
-import { whatsappBase } from '../data/products';
+import { createWhatsAppUrl, whatsappBase } from '../data/products';
 
 export function ContactPage() {
   const [status, setStatus] = useState('');
@@ -13,6 +13,18 @@ export function ContactPage() {
     setStatus('');
     const form = event.currentTarget;
     const payload = Object.fromEntries(new FormData(form).entries());
+    const whatsappUrl = createWhatsAppUrl(
+      [
+        'Hi ES Fire India, I have a website enquiry.',
+        `Name: ${payload.name}`,
+        `Email: ${payload.email}`,
+        `Phone: ${payload.phone || 'Not provided'}`,
+        `Interest: ${payload.interest}`,
+        `Message: ${payload.message}`,
+      ].join('\n'),
+    );
+
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
 
     try {
       const response = await fetch('/api/enquiries', {
@@ -47,8 +59,8 @@ export function ContactPage() {
             <a href={whatsappBase} target="_blank" rel="noreferrer">
               <Check /> WhatsApp us <ArrowUpRight />
             </a>
-            <a href="tel:+911140005678">
-              <Phone /> +91 11 4000 5678
+            <a href="tel:+918360935461">
+              <Phone /> +91 83609-35461
             </a>
             <a href="mailto:contact@esfire.in">
               <Mail /> contact@esfire.in

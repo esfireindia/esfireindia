@@ -96,8 +96,15 @@ export const products = [
   },
 ];
 
-export const whatsappBase =
-  "https://wa.me/919876543210?text=Hi%20ES%20Fire%20India%2C%20I'm%20interested%20in%20your%20fire%20products.%20Please%20share%20more%20details.";
+export const whatsappNumber = '918360935461';
+
+export function createWhatsAppUrl(message) {
+  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+}
+
+export const whatsappBase = createWhatsAppUrl(
+  "Hi ES Fire India, I'm interested in your fire products. Please share more details.",
+);
 
 export const applicationOptions = [
   {

@@ -75,7 +75,7 @@ function Footer() {
           </a>
           <a href="mailto:contact@esfire.in">contact@esfire.in</a>
           <a
-            href="https://instagram.com/esfire.india"
+            href="https://www.instagram.com/esfireindia"
             target="_blank"
             rel="noreferrer"
             aria-label="Instagram"
