@@ -321,7 +321,7 @@ export function MotionController() {
           },
         });
 
-        gsap.from('.footer-fire-word', {
+        gsap.from('.footer-fire-art', {
           y: 65,
           scale: 0.94,
           autoAlpha: 0,

@@ -149,13 +149,12 @@ function Footer() {
       </div>
 
       <div className="footer-fire-stage">
-        <div className="footer-fire-word" aria-label="ESFIRE">
-          <span
-            className="footer-fire-layer footer-fire-texture"
-            aria-hidden="true"
-          >
-            ESFIRE
-          </span>
+        <div className="footer-fire-art">
+          <img
+            className="footer-fire-image"
+            src="/assets/footer-fire-exact.png"
+            alt="ESFIRE in fire"
+          />
         </div>
       </div>
 
