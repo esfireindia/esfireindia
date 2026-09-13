@@ -2,6 +2,8 @@ import { ArrowUpRight, Camera, Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { whatsappBase } from '../../data/products';
+import { CursorFollower } from '../motion/CursorFollower';
+import { MotionController } from '../motion/MotionController';
 
 const navItems = [
   ['Home', '/'],
@@ -67,17 +69,35 @@ function Header() {
           ESFIRE <em>INDIA</em>
         </span>
       </Link>
-      <nav className={`main-nav${open ? ' is-open' : ''}`} aria-label="Primary navigation">
+      <nav
+        className={`main-nav${open ? ' is-open' : ''}`}
+        aria-label="Primary navigation"
+      >
         {navItems.map(([label, path]) => (
-          <NavLink key={path} to={path} end={path === '/'} onClick={() => setOpen(false)}>
+          <NavLink
+            key={path}
+            to={path}
+            end={path === '/'}
+            onClick={() => setOpen(false)}
+          >
             {label}
           </NavLink>
         ))}
-        <a className="mobile-quote" href={whatsappBase} target="_blank" rel="noreferrer">
+        <a
+          className="mobile-quote"
+          href={whatsappBase}
+          target="_blank"
+          rel="noreferrer"
+        >
           Get a quote <ArrowUpRight size={15} />
         </a>
       </nav>
-      <a className="header-quote" href={whatsappBase} target="_blank" rel="noreferrer">
+      <a
+        className="header-quote"
+        href={whatsappBase}
+        target="_blank"
+        rel="noreferrer"
+      >
         Get a quote <ArrowUpRight size={15} />
       </a>
       <button
@@ -128,7 +148,9 @@ function Footer() {
       </div>
       <div className="shell footer-bottom">
         <span>© ES FIRE INDIA / BUILT AROUND FIRE</span>
-        <span>JALANDHAR, PUNJAB, INDIA&nbsp; / INFORMATION SUBJECT TO CONFIRMATION</span>
+        <span>
+          JALANDHAR, PUNJAB, INDIA&nbsp; / INFORMATION SUBJECT TO CONFIRMATION
+        </span>
       </div>
     </footer>
   );
@@ -138,19 +160,25 @@ function ScrollToTop() {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (window.__esfireLenis) {
+      window.__esfireLenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
   }, [location.pathname]);
 
   return null;
 }
 
 export function SiteLayout({ children }) {
-  const [progress, setProgress] = useState(0);
+  const progressRef = useRef(null);
 
   useEffect(() => {
     const update = () => {
       const total = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(total > 0 ? (window.scrollY / total) * 100 : 0);
+      const progress = total > 0 ? window.scrollY / total : 0;
+      if (progressRef.current)
+        progressRef.current.style.transform = `scaleX(${progress})`;
     };
 
     update();
@@ -160,7 +188,12 @@ export function SiteLayout({ children }) {
 
   return (
     <>
-      <div className="scroll-progress" style={{ width: `${progress}%` }} />
+      <MotionController />
+      <CursorFollower />
+      <div className="page-transition" aria-hidden="true">
+        <span>ESFIRE / ENGINEERED FOR FIRE</span>
+      </div>
+      <div className="scroll-progress" ref={progressRef} />
       <ScrollToTop />
       <Header />
       <main>{children}</main>

@@ -1,43 +1,92 @@
 import { ArrowUpRight } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function HorizontalCollection({ products }) {
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const section = sectionRef.current;
     const track = trackRef.current;
 
     if (!section || !track) return undefined;
 
-    let frameId = null;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+      return undefined;
 
-    const updatePosition = () => {
-      const scrollDistance = Math.max(section.offsetHeight - window.innerHeight, 1);
-      const sectionTop = section.getBoundingClientRect().top;
-      const progress = Math.min(1, Math.max(0, -sectionTop / scrollDistance));
-      const horizontalDistance = Math.max(track.scrollWidth - window.innerWidth, 0);
+    const context = gsap.context(() => {
+      const panels = gsap.utils.toArray('.collection-panel');
+      const horizontalTween = gsap.to(track, {
+        x: () => -(track.scrollWidth - window.innerWidth),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.7,
+          invalidateOnRefresh: true,
+        },
+      });
 
-      track.style.transform = `translate3d(${-progress * horizontalDistance}px, 0, 0)`;
-      frameId = null;
-    };
+      gsap.from('.collection-intro-title > *, .collection-intro-copy > *', {
+        y: 52,
+        autoAlpha: 0,
+        duration: 0.95,
+        stagger: 0.1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 76%',
+          once: true,
+        },
+      });
 
-    const requestUpdate = () => {
-      if (frameId !== null) return;
-      frameId = window.requestAnimationFrame(updatePosition);
-    };
+      panels.slice(1).forEach((panel) => {
+        const content = panel.querySelector('.collection-product-content');
+        const image = panel.querySelector('img');
 
-    updatePosition();
-    window.addEventListener('scroll', requestUpdate, { passive: true });
-    window.addEventListener('resize', requestUpdate);
+        if (content) {
+          gsap.from(content.children, {
+            y: 58,
+            autoAlpha: 0,
+            duration: 0.85,
+            stagger: 0.09,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: panel,
+              containerAnimation: horizontalTween,
+              start: 'left 78%',
+              toggleActions: 'play none none reverse',
+            },
+          });
+        }
 
-    return () => {
-      window.removeEventListener('scroll', requestUpdate);
-      window.removeEventListener('resize', requestUpdate);
-      if (frameId !== null) window.cancelAnimationFrame(frameId);
-    };
+        if (image) {
+          gsap.fromTo(
+            image,
+            { scale: 1.1 },
+            {
+              scale: 1,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: panel,
+                containerAnimation: horizontalTween,
+                start: 'left right',
+                end: 'right left',
+                scrub: true,
+              },
+            },
+          );
+        }
+      });
+    }, section);
+
+    return () => context.revert();
   }, []);
 
   return (
@@ -64,8 +113,8 @@ export function HorizontalCollection({ products }) {
             <div className="collection-intro-copy">
               <span className="kicker">SCROLL / EXPLORE</span>
               <p>
-                A small, focused collection of fire products for inside, outside, and everywhere in
-                between.
+                A small, focused collection of fire products for inside,
+                outside, and everywhere in between.
               </p>
               <span className="collection-progress" aria-hidden="true">
                 01 — 04
@@ -82,7 +131,9 @@ export function HorizontalCollection({ products }) {
             >
               <img src={product.image} alt={product.name} />
               <span className="collection-product-shade" aria-hidden="true" />
-              <span className="collection-product-category">{product.category}</span>
+              <span className="collection-product-category">
+                {product.category}
+              </span>
               <span className="collection-product-counter">
                 {String(index + 2).padStart(2, '0')} — 04
               </span>

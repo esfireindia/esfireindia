@@ -32,9 +32,15 @@ export function ApplicationsPage() {
           ))}
         </div>
         <Link to={`/products/${current.slug}`} className="application-result">
-          <img src={current.image} alt={`${current.label} fire application`} />
+          <img
+            src={current.image}
+            alt={`${current.label} fire application`}
+            key={current.image}
+          />
           <div>
-            <span className="kicker">SELECTED / {current.label.toUpperCase()}</span>
+            <span className="kicker">
+              SELECTED / {current.label.toUpperCase()}
+            </span>
             <h2>{current.copy}</h2>
           </div>
           <span className="result-arrow">
