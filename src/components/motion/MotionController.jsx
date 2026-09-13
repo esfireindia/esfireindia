@@ -299,18 +299,41 @@ export function MotionController() {
         });
       }
 
-      gsap.from('.footer-main > *', {
-        y: 45,
-        autoAlpha: 0,
-        duration: 0.9,
-        stagger: 0.1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.site-footer',
-          start: 'top 88%',
-          once: true,
-        },
-      });
+      const footer = document.querySelector('.site-footer');
+      if (footer) {
+        ScrollTrigger.create({
+          trigger: footer,
+          start: 'top bottom',
+          end: 'bottom top',
+          toggleClass: { targets: footer, className: 'is-in-view' },
+        });
+
+        gsap.from('.footer-main > *', {
+          y: 45,
+          autoAlpha: 0,
+          duration: 0.9,
+          stagger: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: footer,
+            start: 'top 88%',
+            once: true,
+          },
+        });
+
+        gsap.from('.footer-fire-word', {
+          y: 65,
+          scale: 0.94,
+          autoAlpha: 0,
+          duration: 1.25,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.footer-fire-stage',
+            start: 'top 88%',
+            once: true,
+          },
+        });
+      }
 
       window.requestAnimationFrame(() => ScrollTrigger.refresh());
     });

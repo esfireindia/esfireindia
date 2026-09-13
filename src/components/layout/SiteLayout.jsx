@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { whatsappBase } from '../../data/products';
 import { CursorFollower } from '../motion/CursorFollower';
+import { FireText } from '../motion/FireText';
 import { MotionController } from '../motion/MotionController';
 
 const navItems = [
@@ -117,25 +118,24 @@ function Footer() {
   return (
     <footer className="site-footer">
       <div className="shell footer-main">
-        <div className="footer-brand">
-          <span className="footer-logo">ESFIRE</span>
-          <span>INDIA</span>
-          <small>ENGINEERED FOR FIRE</small>
-        </div>
         <div className="footer-column">
           <span className="kicker">EXPLORE</span>
-          {navItems.slice(1).map(([label, path]) => (
+          {navItems.slice(1, 5).map(([label, path]) => (
             <Link key={path} to={path}>
               {label}
             </Link>
           ))}
         </div>
-        <div className="footer-column footer-contact">
-          <span className="kicker">START A CONVERSATION</span>
+        <div className="footer-column">
+          <span className="kicker">ENQUIRIES</span>
+          <Link to="/contact">Contact</Link>
           <a href={whatsappBase} target="_blank" rel="noreferrer">
             WhatsApp <ArrowUpRight size={15} />
           </a>
           <a href="mailto:contact@esfire.in">contact@esfire.in</a>
+        </div>
+        <div className="footer-column footer-contact">
+          <span className="kicker">CONNECT</span>
           <a
             href="https://www.instagram.com/esfireindia"
             target="_blank"
@@ -144,13 +144,27 @@ function Footer() {
           >
             Instagram <Camera size={14} />
           </a>
+          <Link to="/">Home</Link>
+          <span className="footer-location">Jalandhar, Punjab, India</span>
         </div>
       </div>
+
+      <div className="footer-fire-stage">
+        <div className="footer-fire-word" aria-label="ESFIRE">
+          <span
+            className="footer-fire-layer footer-fire-outline"
+            aria-hidden="true"
+          >
+            ESFIRE
+          </span>
+          <FireText />
+        </div>
+      </div>
+
       <div className="shell footer-bottom">
-        <span>© ES FIRE INDIA / BUILT AROUND FIRE</span>
-        <span>
-          JALANDHAR, PUNJAB, INDIA&nbsp; / INFORMATION SUBJECT TO CONFIRMATION
-        </span>
+        <span>WOOD-FIRE EQUIPMENT / EST. 2026</span>
+        <span>ENGINEERED FOR COOKING, WARMTH &amp; GATHERING</span>
+        <span>© 2026 ESFIRE INDIA</span>
       </div>
     </footer>
   );
