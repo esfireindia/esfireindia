@@ -6,22 +6,22 @@ function createPalette() {
   return Array.from({ length: 256 }, (_, index) => {
     const heat = index / 255;
 
-    if (heat < 0.16) {
-      return [88, 8, 0, Math.round((heat / 0.16) * 105)];
-    }
-
     if (heat < 0.42) {
-      const mix = (heat - 0.16) / 0.26;
-      return [Math.round(118 + 125 * mix), Math.round(13 + 35 * mix), 0, 190];
+      return [4, 3, 2, Math.round((heat / 0.42) * 72)];
     }
 
-    if (heat < 0.72) {
-      const mix = (heat - 0.42) / 0.3;
-      return [255, Math.round(58 + 105 * mix), Math.round(4 + 10 * mix), 235];
+    if (heat < 0.66) {
+      const mix = (heat - 0.42) / 0.24;
+      return [Math.round(55 + 130 * mix), Math.round(13 + 38 * mix), 0, 150];
     }
 
-    const mix = (heat - 0.72) / 0.28;
-    return [255, Math.round(165 + 82 * mix), Math.round(26 + 176 * mix), 255];
+    if (heat < 0.88) {
+      const mix = (heat - 0.66) / 0.22;
+      return [Math.round(188 + 67 * mix), Math.round(55 + 96 * mix), 0, 218];
+    }
+
+    const mix = (heat - 0.88) / 0.12;
+    return [255, Math.round(155 + 80 * mix), Math.round(6 + 62 * mix), 245];
   });
 }
 
@@ -45,26 +45,35 @@ export function FireText() {
     let heat = new Uint8Array(1);
     let columns = 1;
     let rows = 1;
+    let fuelRow = 1;
     let width = 1;
     let height = 1;
     let frameId = null;
     let active = false;
     let disposed = false;
+    let lastUpdate = 0;
 
     if (!context || !fireContext) return undefined;
 
     const seedBase = () => {
-      const bottomRow = (rows - 1) * columns;
-      const rowAbove = Math.max(0, rows - 2) * columns;
+      const bottomRow = fuelRow * columns;
+      const rowAbove = Math.max(0, fuelRow - 1) * columns;
+      const time = performance.now() * 0.00032;
 
       for (let x = 0; x < columns; x += 1) {
-        const pulse = Math.sin(x * 0.17 + performance.now() * 0.004) * 22;
-        const sparkGap = Math.random() > 0.965;
-        const value = sparkGap ? 95 : 218 + pulse + Math.random() * 37;
+        const ribbon =
+          Math.sin(x * 0.075 + time) * 0.52 +
+          Math.sin(x * 0.19 - time * 0.64) * 0.28 +
+          Math.sin(x * 0.031 + time * 0.42) * 0.2;
+        const ember = Math.random() * 0.32;
+        const lit = ribbon + ember > -0.02;
+        const value = lit
+          ? 178 + Math.max(0, ribbon) * 64 + Math.random() * 18
+          : Math.random() * 36;
         heat[bottomRow + x] = Math.max(0, Math.min(255, value));
         heat[rowAbove + x] = Math.max(
           0,
-          heat[bottomRow + x] - Math.random() * 22,
+          heat[bottomRow + x] - 12 - Math.random() * 25,
         );
       }
     };
@@ -72,14 +81,18 @@ export function FireText() {
     const propagateFire = () => {
       seedBase();
 
-      for (let y = 1; y < rows; y += 1) {
+      for (let y = 1; y <= fuelRow; y += 1) {
         for (let x = 0; x < columns; x += 1) {
           const source = y * columns + x;
-          const drift = Math.floor(Math.random() * 3) - 1;
+          const drift = Math.random() < 0.58 ? 0 : Math.random() < 0.5 ? -1 : 1;
           const destinationX = (x + drift + columns) % columns;
           const destination = (y - 1) * columns + destinationX;
-          const cooling = Math.floor(Math.random() * 5);
-          heat[destination] = Math.max(0, heat[source] - cooling);
+          const left = y * columns + ((x - 1 + columns) % columns);
+          const right = y * columns + ((x + 1) % columns);
+          const softened = (heat[source] * 2 + heat[left] + heat[right]) / 4;
+          const cooling = 0.45 + Math.random() * 1.55;
+          const nextHeat = Math.max(0, softened - cooling);
+          heat[destination] = heat[destination] * 0.76 + nextHeat * 0.24;
         }
       }
     };
@@ -130,11 +143,15 @@ export function FireText() {
       context.restore();
     };
 
-    const render = () => {
+    const render = (timestamp) => {
       if (!active) return;
-      propagateFire();
-      propagateFire();
-      paintFire();
+
+      if (timestamp - lastUpdate >= 96) {
+        propagateFire();
+        paintFire();
+        lastUpdate = timestamp;
+      }
+
       frameId = window.requestAnimationFrame(render);
     };
 
@@ -151,18 +168,19 @@ export function FireText() {
 
       columns = Math.max(120, Math.round(width / 5));
       rows = Math.max(52, Math.round(height / 4));
+      fuelRow = Math.max(2, Math.floor(rows * 0.755));
       fireCanvas.width = columns;
       fireCanvas.height = rows;
       heat = new Uint8Array(columns * rows);
 
-      for (let index = 0; index < rows * 1.4; index += 1) propagateFire();
+      for (let index = 0; index < rows * 4; index += 1) propagateFire();
       paintFire();
     };
 
     const start = () => {
       if (active || reducedMotion) return;
       active = true;
-      render();
+      frameId = window.requestAnimationFrame(render);
     };
 
     const stop = () => {
