@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { whatsappBase } from '../../data/products';
 import { CursorFollower } from '../motion/CursorFollower';
-import { FireText } from '../motion/FireText';
 import { MotionController } from '../motion/MotionController';
 
 const navItems = [
@@ -152,12 +151,11 @@ function Footer() {
       <div className="footer-fire-stage">
         <div className="footer-fire-word" aria-label="ESFIRE">
           <span
-            className="footer-fire-layer footer-fire-outline"
+            className="footer-fire-layer footer-fire-texture"
             aria-hidden="true"
           >
             ESFIRE
           </span>
-          <FireText />
         </div>
       </div>
 
