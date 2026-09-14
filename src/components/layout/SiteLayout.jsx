@@ -146,6 +146,11 @@ function Footer() {
           <Link to="/">Home</Link>
           <span className="footer-location">Jalandhar, Punjab, India</span>
         </div>
+        <div className="footer-column">
+          <span className="kicker">LEGAL</span>
+          <Link to="/terms-and-conditions">Terms &amp; Conditions</Link>
+          <Link to="/privacy-policy">Privacy Policy</Link>
+        </div>
       </div>
 
       <div className="footer-fire-stage">

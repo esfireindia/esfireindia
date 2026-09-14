@@ -18,6 +18,10 @@ const headingSelector = [
   '.sequence-heading h2',
   '.product-summary h1',
   '.spec-inner h2',
+  '.review-heading h2',
+  '.review-invite h3',
+  '.faq-heading h2',
+  '.related-heading h2',
   '.about-statement h2',
   '.about-ending h2',
   '.contact-panel h2',
@@ -32,6 +36,9 @@ const cardSelector = [
   '.application-buttons button',
   '.finder-options button',
   '.spec-grid > div',
+  '.review-grid > div',
+  '.faq-item',
+  '.legal-sections article',
 ].join(',');
 
 const imageSelector = [
@@ -269,7 +276,7 @@ export function MotionController() {
       }
 
       gsap.utils
-        .toArray('.section-heading > p, .page-intro > p, .finder-heading > p')
+        .toArray('.section-heading > p, .page-intro > p, .finder-heading > p, .review-heading > p, .faq-heading > p')
         .forEach((copy) => {
           gsap.from(copy, {
             y: 34,

@@ -5,6 +5,7 @@ import { ApplicationsPage } from './pages/ApplicationsPage';
 import { ContactPage } from './pages/ContactPage';
 import { CraftPage } from './pages/CraftPage';
 import { HomePage } from './pages/HomePage';
+import { PrivacyPolicyPage, TermsPage } from './pages/LegalPages';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { ProductsPage } from './pages/ProductsPage';
@@ -20,6 +21,8 @@ export default function App() {
         <Route path="/applications" element={<ApplicationsPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/terms-and-conditions" element={<TermsPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </SiteLayout>
