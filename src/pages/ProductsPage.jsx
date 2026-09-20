@@ -3,7 +3,7 @@ import { ProductCard } from '../components/product/ProductCard';
 import { ArrowLink } from '../components/ui/ArrowLink';
 import { products } from '../data/products';
 
-const filters = ['All', 'Tandoor', 'Fire Stove', 'Bonfire', 'Rocket Stove'];
+const filters = ['All', 'Fire Stove', 'Bonfire', 'Rocket Stove'];
 
 export function ProductsPage() {
   const [filter, setFilter] = useState('All');
@@ -12,7 +12,7 @@ export function ProductsPage() {
   return (
     <>
       <section className="shell products-hero">
-        <span className="kicker">COLLECTION / 05 PRODUCTS</span>
+        <span className="kicker">COLLECTION / 03 PRODUCTS</span>
         <div>
           <h1>
             The ESFIRE
@@ -21,7 +21,7 @@ export function ProductsPage() {
           </h1>
           <p>
             Purpose-built products for cooking, warming, gathering and moving through the outdoors.
-            Explore the current static catalogue.
+            Explore the complete ESFIRE collection.
           </p>
         </div>
       </section>

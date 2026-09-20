@@ -129,7 +129,7 @@ export function HorizontalCollection({ products }) {
               key={product.slug}
               aria-label={`View ${product.name}`}
             >
-              <img src={product.image} alt={product.name} />
+              <img src={product.collectionImage || product.image} alt={product.name} />
               <span className="collection-product-shade" aria-hidden="true" />
               <span className="collection-product-category">
                 {product.category}

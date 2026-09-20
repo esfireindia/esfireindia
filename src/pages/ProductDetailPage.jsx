@@ -32,13 +32,19 @@ const highlightIcons = {
 };
 
 const optionalLineKeys = [
-  'price_line',
-  'warranty_line',
-  'delivery_time_line',
   'installation_support_line',
   'chimney_pipe_line',
   'heating_area_line',
 ];
+
+const aboutLineKeys = ['price_line', 'warranty_line', 'delivery_time_line', 'bag_included_line'];
+
+const specConfigKeyByLabel = {
+  'Assembled size': 'assembled_size',
+  'Packed size': 'packed_size',
+  Weight: 'weight',
+  'Material thickness': 'material_thickness',
+};
 
 function getProductFaqs(product) {
   return [
@@ -117,7 +123,7 @@ function HighlightsStrip({ highlights }) {
   );
 }
 
-function AboutProduct({ about }) {
+function AboutProduct({ about, details = [] }) {
   if (!about?.heading || !about?.paragraphs?.length) return null;
 
   return (
@@ -130,13 +136,29 @@ function AboutProduct({ about }) {
         {about.paragraphs.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}
+        {details.length > 0 && (
+          <div className="product-about-details">
+            {details.map((detail) => (
+              <span key={detail}>{detail}</span>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
 function ProductSpecifications({ product, selectedVariantId, onSelectVariant }) {
-  const realSpecs = (product.specs || []).filter(([, value]) => hasRealValue(value));
+  const realSpecs = (product.specs || [])
+    .map(([label, value]) => {
+      const configuredValue = value || product[specConfigKeyByLabel[label]];
+      const displayValue =
+        label === 'Pot support' && product.max_pot_size_line
+          ? `${configuredValue} ${product.max_pot_size_line}`
+          : configuredValue;
+      return [label, displayValue];
+    })
+    .filter(([, value]) => hasRealValue(value));
   if (!product.specComparison?.length && !realSpecs.length) return null;
 
   return (
@@ -294,6 +316,7 @@ function ProductDetails({ product }) {
     .slice(0, 3);
   const faqs = product.faqs?.length ? product.faqs : getProductFaqs(product);
   const optionalLines = optionalLineKeys.map((key) => product[key]).filter(Boolean);
+  const aboutLines = aboutLineKeys.map((key) => product[key]).filter(Boolean);
   const sizeNumber = selectedVariant?.size || '';
   const sizeMessage = selectedVariant
     ? `, Size ${sizeNumber} (W ${selectedVariant.width.replace(' in', '')} x L ${selectedVariant.length.replace(' in', '')} x H ${selectedVariant.height.replace(' in', '')} in, ${selectedVariant.weight})`
@@ -556,7 +579,7 @@ function ProductDetails({ product }) {
       </section>
 
       <HighlightsStrip highlights={product.highlights} />
-      <AboutProduct about={product.about} />
+      <AboutProduct about={product.about} details={aboutLines} />
       <ProductSpecifications
         product={product}
         selectedVariantId={selectedVariantId}
@@ -592,6 +615,12 @@ function ProductDetails({ product }) {
                   index === 4 && product.installation_support_line
                     ? `${answer} ${product.installation_support_line}`
                     : answer;
+                const answerCopy =
+                  index === 0
+                    ? [installationCopy, product.delivery_time_line, product.warranty_line]
+                        .filter(Boolean)
+                        .join(' ')
+                    : installationCopy;
                 return (
                   <article className={`faq-item${isOpen ? ' is-open' : ''}`} key={question}>
                     <button
@@ -606,7 +635,7 @@ function ProductDetails({ product }) {
                     </button>
                     <div className="faq-answer" id={answerId} hidden={!isOpen}>
                       <div>
-                        <p>{installationCopy}</p>
+                        <p>{answerCopy}</p>
                       </div>
                     </div>
                   </article>

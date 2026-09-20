@@ -9,10 +9,10 @@ import { products, whatsappBase } from '../data/products';
 export function HomePage() {
   const featured = products.slice(0, 3);
   const reasons = [
-    ['Cook', 'Traditional cooking. Modern engineering.', products[1].image],
-    ['Warm', 'Comfort for colder evenings.', products[4].image],
-    ['Gather', 'Designed around shared moments.', products[2].image],
-    ['Explore', 'Built for outdoor experiences.', products[3].image],
+    ['Cook', 'Traditional cooking. Modern engineering.', '/assets/fireview-01.png'],
+    ['Warm', 'Comfort for colder evenings.', '/assets/fireview-05.png'],
+    ['Gather', 'Designed around shared moments.', '/assets/bonfire-03.webp'],
+    ['Explore', 'Built for outdoor experiences.', '/assets/rocket-stove-05.webp'],
   ];
 
   return (
@@ -43,7 +43,7 @@ export function HomePage() {
         </div>
         <div className="hero-foot shell" aria-hidden="true">
           <span className="hero-edge-label hero-edge-label--left">
-            <span>FIREVIEW / GLASS-FRONT &nbsp; 01 — 05</span>
+            <span>FIREVIEW / GLASS-FRONT &nbsp; 01 — 03</span>
           </span>
           <span className="hero-scroll-label">SCROLL TO EXPLORE</span>
           <span className="hero-edge-label hero-edge-label--right">
@@ -86,9 +86,9 @@ export function HomePage() {
       <EngineeringDiagram />
 
       <section className="outdoor-feature">
-        <img src="/assets/bonfire.avif" alt="Smokeless bonfire pit glowing at dusk" />
+        <img src="/assets/bonfire-03.webp" alt="Smokeless Bonfire Pit glowing at dusk" />
         <div className="outdoor-overlay shell">
-          <span className="kicker">OUTDOOR / 03</span>
+          <span className="kicker">OUTDOOR / 02</span>
           <h2>
             Gather around fire.
             <br />
