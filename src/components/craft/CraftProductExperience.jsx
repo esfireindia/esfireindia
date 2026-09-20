@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createWhatsAppUrl } from '../../data/products';
+import { mediaUrl } from '../../utils/media';
 import { VideoShowcase } from '../product/VideoShowcase';
 import { ArrowLink } from '../ui/ArrowLink';
 import { BonfireEngineeringDiagram } from './BonfireEngineeringDiagram';
@@ -221,10 +222,10 @@ export function CraftProductExperience({ craft, layers }) {
             controls
             playsInline
             preload="none"
-            poster="/videos/bonfire/posters/workshop.webp"
+            poster={mediaUrl('/videos/bonfire/posters/workshop.webp')}
             aria-label="ESFIRE workshop fabrication footage"
           >
-            <source src="/videos/bonfire/workshop.mp4" type="video/mp4" />
+            <source src={mediaUrl('/videos/bonfire/workshop.mp4')} type="video/mp4" />
             <track kind="captions" srcLang="en" label="English" />
           </video>
           <div>

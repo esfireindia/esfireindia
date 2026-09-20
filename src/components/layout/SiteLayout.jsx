@@ -2,6 +2,7 @@ import { ArrowUpRight, Camera, Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { whatsappBase } from '../../data/products';
+import { mediaUrl } from '../../utils/media';
 import { CursorFollower } from '../motion/CursorFollower';
 import { MotionController } from '../motion/MotionController';
 
@@ -157,7 +158,7 @@ function Footer() {
         <div className="footer-fire-art">
           <img
             className="footer-fire-image"
-            src="/assets/footer-fire-exact.png"
+            src={mediaUrl('/assets/footer-fire-exact.png')}
             alt="ESFIRE in fire"
           />
         </div>

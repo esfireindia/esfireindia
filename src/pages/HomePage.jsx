@@ -5,22 +5,23 @@ import { CallToAction } from '../components/sections/CallToAction';
 import { ArrowLink } from '../components/ui/ArrowLink';
 import { Preloader } from '../components/ui/Preloader';
 import { products, whatsappBase } from '../data/products';
+import { mediaUrl, resolveMediaPaths } from '../utils/media';
 
 export function HomePage() {
   const featured = products.slice(0, 3);
-  const reasons = [
+  const reasons = resolveMediaPaths([
     ['Cook', 'Traditional cooking. Modern engineering.', '/assets/fireview-01.png'],
     ['Warm', 'Comfort for colder evenings.', '/assets/fireview-05.png'],
     ['Gather', 'Designed around shared moments.', '/assets/bonfire-03.webp'],
     ['Explore', 'Built for outdoor experiences.', '/assets/rocket-stove-05.webp'],
-  ];
+  ]);
 
   return (
     <>
       <Preloader />
       <section className="hero">
         <div className="hero-visual" aria-hidden="true">
-          <img src="/assets/fireview.avif" alt="" />
+          <img src={mediaUrl('/assets/fireview.avif')} alt="" />
         </div>
         <div className="hero-shade" />
         <div className="hero-copy shell">
@@ -86,7 +87,7 @@ export function HomePage() {
       <EngineeringDiagram />
 
       <section className="outdoor-feature">
-        <img src="/assets/bonfire-03.webp" alt="Smokeless Bonfire Pit glowing at dusk" />
+        <img src={mediaUrl('/assets/bonfire-03.webp')} alt="Smokeless Bonfire Pit glowing at dusk" />
         <div className="outdoor-overlay shell">
           <span className="kicker">OUTDOOR / 02</span>
           <h2>

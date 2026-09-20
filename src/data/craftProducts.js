@@ -1,10 +1,11 @@
 import { products } from './products';
+import { resolveMediaPaths } from '../utils/media';
 
 const productBySlug = Object.fromEntries(products.map((product) => [product.slug, product]));
 
 export const craftProductOrder = ['bonfire', 'rocket', 'fireview'];
 
-export const craftProducts = {
+export const craftProducts = resolveMediaPaths({
   bonfire: {
     id: 'bonfire',
     tabLabel: 'SMOKELESS BONFIRE 18"',
@@ -188,7 +189,7 @@ export const craftProducts = {
     ],
     product: productBySlug['fireview-tandoor'],
   },
-};
+});
 
 export const craftLayers = [
   ['airflow', 'AIRFLOW'],

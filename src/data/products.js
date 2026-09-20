@@ -1,4 +1,6 @@
-export const products = [
+import { resolveMediaPaths } from '../utils/media';
+
+export const products = resolveMediaPaths([
   {
     slug: 'fireview-tandoor',
     number: '01',
@@ -628,7 +630,7 @@ export const products = [
     },
     mobileActions: true,
   },
-];
+]);
 
 export const whatsappNumber = '918360935461';
 
@@ -640,7 +642,7 @@ export const whatsappBase = createWhatsAppUrl(
   "Hi ES Fire India, I'm interested in your fire products. Please share more details.",
 );
 
-export const applicationOptions = [
+export const applicationOptions = resolveMediaPaths([
   {
     label: 'Home',
     copy: 'A room with a pulse.',
@@ -677,7 +679,7 @@ export const applicationOptions = [
     image: '/assets/bonfire-02.webp',
     slug: 'smokeless-bonfire-18',
   },
-];
+]);
 
 export const finderOptions = [
   {
