@@ -1,11 +1,24 @@
 import { ArrowUpRight, Check, Flame, Mail, Phone } from 'lucide-react';
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { PageIntro } from '../components/ui/PageIntro';
-import { createWhatsAppUrl, whatsappBase } from '../data/products';
+import { createWhatsAppUrl, products, whatsappBase } from '../data/products';
 
 export function ContactPage() {
   const [status, setStatus] = useState('');
   const [sending, setSending] = useState(false);
+  const [searchParams] = useSearchParams();
+  const requestedProduct = products.find((item) => item.slug === searchParams.get('product'));
+  const requestedSize = searchParams.get('size');
+  const requestedVariant = requestedProduct?.variants?.find(
+    (variant) => variant.size === requestedSize,
+  );
+  const requestedInterest = requestedProduct
+    ? `${requestedProduct.name}${requestedVariant ? ` — ${requestedVariant.label}` : ''}`
+    : 'Choosing a product';
+  const requestedMessage = requestedProduct
+    ? `I would like a quote for the ${requestedProduct.name}${requestedVariant ? `, ${requestedVariant.label}` : ''}. Please share price and delivery details.`
+    : '';
 
   async function submit(event) {
     event.preventDefault();
@@ -69,11 +82,12 @@ export function ContactPage() {
               <Flame /> Jalandhar, Punjab, India
             </span>
           </div>
-          <p className="fine-print">
-            CONTACT DETAILS SHOWN ARE CONFIGURABLE PLACEHOLDERS UNTIL CONFIRMED.
-          </p>
         </div>
-        <form className="enquiry-form" onSubmit={submit}>
+        <form
+          className="enquiry-form"
+          onSubmit={submit}
+          key={`${requestedProduct?.slug || 'general'}-${requestedSize || 'none'}`}
+        >
           <label>
             NAME
             <input name="name" placeholder="Your name" required />
@@ -84,7 +98,8 @@ export function ContactPage() {
           </label>
           <label>
             I’M INTERESTED IN
-            <select name="interest" defaultValue="Choosing a product">
+            <select name="interest" defaultValue={requestedInterest}>
+              {requestedProduct && <option>{requestedInterest}</option>}
               <option>Choosing a product</option>
               <option>A custom requirement</option>
               <option>Hospitality / projects</option>
@@ -97,7 +112,12 @@ export function ContactPage() {
           </label>
           <label className="full">
             MESSAGE
-            <textarea name="message" placeholder="Tell us what you’re imagining..." required />
+            <textarea
+              name="message"
+              placeholder="Tell us what you’re imagining..."
+              defaultValue={requestedMessage}
+              required
+            />
           </label>
           <div className="form-foot">
             <span>We’ll only use your details to respond to this enquiry.</span>

@@ -4,40 +4,255 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  MessageCircle,
+  Eye,
+  Flame,
+  Phone,
   ShieldCheck,
   Star,
+  Truck,
+  Wind,
+  Wrench,
 } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ProductCard } from '../components/product/ProductCard';
+import { VideoShowcase } from '../components/product/VideoShowcase';
 import { ArrowLink } from '../components/ui/ArrowLink';
-import { createWhatsAppUrl, products } from '../data/products';
+import { createWhatsAppUrl, products, whatsappNumber } from '../data/products';
+import { track } from '../utils/analytics';
 import { NotFoundPage } from './NotFoundPage';
+
+const highlightIcons = {
+  eye: Eye,
+  flame: Flame,
+  shield: ShieldCheck,
+  truck: Truck,
+  wind: Wind,
+  wrench: Wrench,
+};
+
+const optionalLineKeys = [
+  'price_line',
+  'warranty_line',
+  'delivery_time_line',
+  'installation_support_line',
+  'chimney_pipe_line',
+  'heating_area_line',
+];
 
 function getProductFaqs(product) {
   return [
     [
       `Is the ${product.name} ready to order?`,
-      'This product is part of the current ESFIRE catalogue. Contact us to confirm the available configuration, lead time and delivery options for your location before placing an order.',
+      'Contact the ESFIRE team for current availability, lead time and delivery options.',
     ],
     [
       'Can the size or finish be customised?',
-      'Tell us where and how you plan to use it, along with any size, finish or installation preferences. We will review the requirement and confirm what can be built for your project.',
+      'Share the intended location, use, size and finish preferences with the ESFIRE team for guidance.',
     ],
     [
-      'What fuel and installation setup does it need?',
-      'The final fuel configuration, clearances, ventilation and installation requirements depend on the confirmed model. These details will be shared with your quotation before purchase.',
-    ],
-    [
-      'Do you deliver outside Jalandhar?',
-      'Share your city and postcode on WhatsApp. The ESFIRE team will confirm delivery availability, estimated timing and any transport charges with your quotation.',
-    ],
-    [
-      'How should the product be maintained?',
-      'Care depends on the selected material and finish. Use only the cleaning and maintenance guidance supplied with the confirmed product, and allow the unit to cool fully before handling.',
+      'What installation setup does it need?',
+      'Installation requirements depend on the selected product and location. Ask the ESFIRE team before ordering.',
     ],
   ];
+}
+
+function hasRealValue(value) {
+  if (!value) return false;
+  const normalized = String(value).trim().toLowerCase();
+  return !['to be confirmed', 'tbc', 'static frontend catalogue'].includes(normalized);
+}
+
+function ProductSeo({ product, images }) {
+  useEffect(() => {
+    if (!product.seo) return undefined;
+
+    const previousTitle = document.title;
+    const meta = document.querySelector('meta[name="description"]');
+    const previousDescription = meta?.getAttribute('content') || '';
+    document.title = product.seo.title;
+    if (meta) meta.setAttribute('content', product.seo.description);
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = `${product.slug}-product-schema`;
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.name,
+      description: product.seo.description,
+      image: images.map((item) => new URL(item.src, window.location.origin).toString()),
+      brand: { '@type': 'Brand', name: 'ESFIRE INDIA' },
+    });
+    document.head.appendChild(script);
+
+    return () => {
+      document.title = previousTitle;
+      if (meta) meta.setAttribute('content', previousDescription);
+      script.remove();
+    };
+  }, [images, product]);
+
+  return null;
+}
+
+function HighlightsStrip({ highlights }) {
+  if (!highlights?.length) return null;
+
+  return (
+    <section className="product-highlights" aria-label="Product highlights">
+      <div className="shell product-highlights-grid">
+        {highlights.map((highlight) => {
+          const Icon = highlightIcons[highlight.icon] || Flame;
+          return (
+            <article key={highlight.title}>
+              <Icon size={23} strokeWidth={1.5} aria-hidden="true" />
+              <strong>{highlight.title}</strong>
+              <p>{highlight.copy}</p>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function AboutProduct({ about }) {
+  if (!about?.heading || !about?.paragraphs?.length) return null;
+
+  return (
+    <section className="shell product-about">
+      <div>
+        <span className="kicker">{about.label}</span>
+        <h2>{about.heading}</h2>
+      </div>
+      <div className="product-about-copy">
+        {about.paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ProductSpecifications({ product, selectedVariantId, onSelectVariant }) {
+  const realSpecs = (product.specs || []).filter(([, value]) => hasRealValue(value));
+  if (!product.specComparison?.length && !realSpecs.length) return null;
+
+  return (
+    <section className="spec-section">
+      <div className="shell spec-inner">
+        <div>
+          <span className="kicker">SPECIFICATIONS</span>
+          <h2>Details are where the fire becomes a product.</h2>
+        </div>
+        {product.specComparison?.length ? (
+          <div className="spec-comparison-wrap">
+            <table className="spec-comparison">
+              <thead>
+                <tr>
+                  <th scope="col">DETAIL</th>
+                  {product.variants.map((variant) => (
+                    <th
+                      className={selectedVariantId === variant.id ? 'is-selected' : ''}
+                      scope="col"
+                      key={variant.id}
+                    >
+                      <button type="button" onClick={() => onSelectVariant(variant.id)}>
+                        {variant.label}
+                      </button>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {product.specComparison.map(([label, ...values]) => (
+                  <tr key={label}>
+                    <th scope="row">{label}</th>
+                    {values.map((value, index) => (
+                      <td
+                        className={
+                          selectedVariantId === product.variants[index]?.id ? 'is-selected' : ''
+                        }
+                        key={`${label}-${product.variants[index]?.id}`}
+                      >
+                        {value}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="spec-grid">
+            {realSpecs.map(([key, value]) => (
+              <div key={key}>
+                <span>{key}</span>
+                <strong>{value}</strong>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function ProcessSection({ content, variant = 'light' }) {
+  if (!content?.heading || !content?.steps?.length) return null;
+
+  return (
+    <section className={`product-process product-process--${variant}`}>
+      <div className="shell product-process-heading">
+        <span className="kicker">{content.label}</span>
+        <h2>{content.heading}</h2>
+      </div>
+      <div className="shell product-process-grid">
+        {content.steps.map((step, index) => {
+          const [title, copy] = Array.isArray(step) ? step : [`Step ${index + 1}`, step];
+          return (
+            <article key={`${title}-${index}`}>
+              <span>0{index + 1}</span>
+              <h3>{title}</h3>
+              <p>{copy}</p>
+            </article>
+          );
+        })}
+      </div>
+      {content.safetyNote && (
+        <div className="shell safety-note">
+          <strong>SAFETY NOTE</strong>
+          <p>{content.safetyNote}</p>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function VerifiedReviews({ reviews }) {
+  if (!reviews?.length) return null;
+
+  const average = reviews.reduce((total, review) => total + review.rating, 0) / reviews.length;
+  return (
+    <section className="shell verified-reviews" id="reviews">
+      <span className="kicker">VERIFIED REVIEWS</span>
+      <h2>{average.toFixed(1)} out of 5</h2>
+      <div className="verified-review-list">
+        {reviews.map((review) => (
+          <article key={review.id}>
+            <div aria-label={`${review.rating} out of 5 stars`}>
+              {Array.from({ length: review.rating }, (_, index) => (
+                <Star size={16} fill="currentColor" key={index} />
+              ))}
+            </div>
+            <p>{review.copy}</p>
+            <strong>{review.name}</strong>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
 }
 
 export function ProductDetailPage() {
@@ -52,34 +267,66 @@ export function ProductDetailPage() {
 function ProductDetails({ product }) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [openFaq, setOpenFaq] = useState(0);
-  const [rating, setRating] = useState(0);
   const [selectedVariantId, setSelectedVariantId] = useState(product.variants?.[0]?.id ?? null);
   const touchStartX = useRef(null);
   const suppressGalleryClick = useRef(false);
 
-  const images = product.gallery?.length
+  const images = (product.gallery?.length
     ? product.gallery
-    : [product.image, product.alternateImage].filter(Boolean);
+    : [product.image, product.alternateImage].filter(Boolean)
+  ).map((item, index) =>
+    typeof item === 'string'
+      ? { src: item, alt: `${product.name} product view ${index + 1}` }
+      : item,
+  );
   const thumbnailStart = Math.min(
     Math.max(selectedImage - 1, 0),
     Math.max(images.length - 3, 0),
   );
   const visibleThumbnails = images.slice(thumbnailStart, thumbnailStart + 3);
   const selectedVariant = product.variants?.find((variant) => variant.id === selectedVariantId);
+  const selectedVariantIndex = product.variants?.findIndex(
+    (variant) => variant.id === selectedVariantId,
+  );
   const productIndex = products.findIndex((item) => item.slug === product.slug);
   const relatedProducts = [...products.slice(productIndex + 1), ...products.slice(0, productIndex)]
     .filter((item) => item.slug !== product.slug)
     .slice(0, 3);
-  const faqs = getProductFaqs(product);
-  const selectedVariantMessage = selectedVariant
-    ? ` I have selected ${selectedVariant.label}: ${selectedVariant.width} width, ${selectedVariant.length} length, ${selectedVariant.height} height, ${selectedVariant.weight} weight.`
+  const faqs = product.faqs?.length ? product.faqs : getProductFaqs(product);
+  const optionalLines = optionalLineKeys.map((key) => product[key]).filter(Boolean);
+  const sizeNumber = selectedVariant?.size || '';
+  const sizeMessage = selectedVariant
+    ? `, Size ${sizeNumber} (W ${selectedVariant.width.replace(' in', '')} x L ${selectedVariant.length.replace(' in', '')} x H ${selectedVariant.height.replace(' in', '')} in, ${selectedVariant.weight})`
     : '';
   const whatsApp = createWhatsAppUrl(
-    `Hi ES Fire India, I'm interested in ${product.name}.${selectedVariantMessage} Please share more details.`,
+    `Hi, I want to order the ${product.name}${sizeMessage}. Please share price and delivery details.`,
   );
-  const reviewWhatsApp = createWhatsAppUrl(
-    `Hi ES Fire India, I'd like to share a ${rating}-star review for ${product.name}.`,
+  const sizeHelpWhatsApp = createWhatsAppUrl(
+    `Hi, I need help choosing the right size of the ${product.name}.`,
   );
+  const quoteUrl = selectedVariant
+    ? `/contact?product=${encodeURIComponent(product.slug)}&size=${encodeURIComponent(sizeNumber)}`
+    : `/contact?product=${encodeURIComponent(product.slug)}`;
+
+  const selectVariant = (variantId) => {
+    const variant = product.variants?.find((item) => item.id === variantId);
+    setSelectedVariantId(variantId);
+    if (variant) track('size_selected', { size: variant.size });
+  };
+
+  const handleVariantKeyDown = (event) => {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
+    event.preventDefault();
+    const direction = event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 1;
+    const nextIndex =
+      (selectedVariantIndex + direction + product.variants.length) % product.variants.length;
+    const nextVariant = product.variants[nextIndex];
+    selectVariant(nextVariant.id);
+    window.requestAnimationFrame(() => {
+      document.getElementById(`${product.slug}-${nextVariant.id}`)?.focus();
+    });
+  };
+
   const showPreviousImage = () => {
     setSelectedImage((current) => (current - 1 + images.length) % images.length);
   };
@@ -102,11 +349,9 @@ function ProductDetails({ product }) {
   };
   const handleTouchEnd = (event) => {
     if (touchStartX.current === null) return;
-
     const touchEndX = event.changedTouches[0]?.clientX ?? touchStartX.current;
     const distance = touchEndX - touchStartX.current;
     touchStartX.current = null;
-
     if (Math.abs(distance) < 45) return;
     suppressGalleryClick.current = true;
     if (distance < 0) showNextImage();
@@ -119,9 +364,15 @@ function ProductDetails({ product }) {
     }
     showNextImage();
   };
+  const handleFaqToggle = (index, question) => {
+    const isOpen = openFaq === index;
+    setOpenFaq(isOpen ? -1 : index);
+    if (!isOpen) track('faq_open', { question });
+  };
 
   return (
-    <>
+    <div className="product-page">
+      <ProductSeo product={product} images={images} />
       <section className="shell product-detail">
         <Link className="back-link" to="/products">
           <ArrowLeft size={15} /> BACK TO COLLECTION
@@ -129,9 +380,9 @@ function ProductDetails({ product }) {
         <div className="product-gallery">
           <div className="gallery-main">
             <img
-              key={images[selectedImage]}
-              src={images[selectedImage]}
-              alt={`${product.name} product view ${selectedImage + 1} of ${images.length}`}
+              key={images[selectedImage].src}
+              src={images[selectedImage].src}
+              alt={images[selectedImage].alt}
               draggable="false"
             />
             {images.length > 1 && (
@@ -173,62 +424,74 @@ function ProductDetails({ product }) {
           >
             {visibleThumbnails.map((image, offset) => {
               const index = thumbnailStart + offset;
-
               return (
                 <button
                   type="button"
                   className={selectedImage === index ? 'active' : ''}
                   onClick={() => setSelectedImage(index)}
-                  key={image}
+                  key={image.src}
                   aria-label={`Show ${product.name} image ${index + 1}`}
                   aria-current={selectedImage === index ? 'true' : undefined}
                 >
-                  <img
-                    src={image}
-                    alt=""
-                    loading={index === 0 ? 'eager' : 'lazy'}
-                    draggable="false"
-                  />
+                  <img src={image.src} alt="" loading="lazy" draggable="false" />
                 </button>
               );
             })}
           </div>
         </div>
+
         <div className="product-summary">
           <span className="kicker">
             {product.number} / {product.eyebrow} &nbsp;/&nbsp; {product.category.toUpperCase()}
           </span>
           <h1>{product.name}</h1>
-          <a className="product-rating-link" href="#reviews">
-            <span aria-hidden="true">
-              {[1, 2, 3, 4, 5].map((value) => (
-                <Star key={value} size={15} />
-              ))}
-            </span>
-            BE THE FIRST TO REVIEW
-          </a>
+          {product.reviews?.length > 0 && (
+            <a className="product-rating-link" href="#reviews">
+              <span aria-hidden="true">
+                {Array.from({ length: 5 }, (_, index) => (
+                  <Star key={index} size={15} />
+                ))}
+              </span>
+              {product.reviews.length} VERIFIED REVIEWS
+            </a>
+          )}
           <p>{product.description}</p>
+          {optionalLines.length > 0 && (
+            <div className="optional-product-lines">
+              {optionalLines.map((line) => (
+                <span key={line}>{line}</span>
+              ))}
+            </div>
+          )}
+
           {product.variants?.length > 0 && (
             <fieldset className="variant-selector">
               <legend>
                 <span className="kicker">AVAILABLE SIZES</span>
                 <strong>Choose your size</strong>
               </legend>
-              <div className="variant-options">
+              <div
+                className="variant-options"
+                role="radiogroup"
+                aria-label={`Choose a ${product.name} size`}
+                tabIndex={-1}
+                onKeyDown={handleVariantKeyDown}
+              >
                 {product.variants.map((variant) => {
                   const isSelected = variant.id === selectedVariantId;
-
                   return (
                     <label
                       className={`variant-option${isSelected ? ' is-selected' : ''}`}
                       key={variant.id}
                     >
                       <input
+                        id={`${product.slug}-${variant.id}`}
                         type="radio"
                         name={`${product.slug}-size`}
                         value={variant.id}
                         checked={isSelected}
-                        onChange={() => setSelectedVariantId(variant.id)}
+                        aria-checked={isSelected}
+                        onChange={() => selectVariant(variant.id)}
                       />
                       <span className="variant-option-heading">
                         <span>{variant.label}</span>
@@ -247,174 +510,117 @@ function ProductDetails({ product }) {
               <p className="variant-selection-note" aria-live="polite">
                 SELECTED / {selectedVariant?.label.toUpperCase()} — {selectedVariant?.weight}
               </p>
+              <a
+                className="size-help-link"
+                href={sizeHelpWhatsApp}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Not sure which size? Ask on WhatsApp
+              </a>
             </fieldset>
           )}
+
           <div className="button-row">
-            <ArrowLink to={whatsApp} external>
+            <ArrowLink
+              to={whatsApp}
+              external
+              onClick={() => track('whatsapp_click', { size: sizeNumber, location: 'hero' })}
+            >
               ENQUIRE ON WHATSAPP
             </ArrowLink>
-            <ArrowLink to="/contact" outline>
+            <ArrowLink
+              to={quoteUrl}
+              outline
+              onClick={() => track('quote_click', { size: sizeNumber })}
+            >
               GET A QUOTE
             </ArrowLink>
           </div>
-          <div className="application-list">
-            <span className="kicker">APPLICATIONS</span>
-            <div>
-              {product.applications.map((application) => (
-                <span key={application}>
-                  <Check size={15} /> {application}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="spec-section">
-        <div className="shell spec-inner">
-          <div>
-            <span className="kicker">SPECIFICATIONS / STATIC CATALOGUE</span>
-            <h2>Details are where the fire becomes a product.</h2>
-            <p>
-              Confirmed dimensions, finishes and fuel configurations will be added as the product
-              catalogue is finalised.
-            </p>
-          </div>
-          <div className="spec-grid">
-            {product.specs.map(([key, value]) => (
-              <div key={key}>
-                <span>{key}</span>
-                <strong>{value}</strong>
+          {product.trustLine?.length > 0 && (
+            <p className="product-trust-line">{product.trustLine.join(' | ')}</p>
+          )}
+          {product.applications?.length > 0 && (
+            <div className="application-list">
+              <span className="kicker">APPLICATIONS</span>
+              <div>
+                {product.applications.map((application) => (
+                  <span key={application}>
+                    <Check size={15} /> {application}
+                  </span>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-        <div className="shell fine-print">
-          STATIC FRONTEND CATALOGUE / &nbsp; INFORMATION SUBJECT TO CONFIRMATION
+            </div>
+          )}
         </div>
       </section>
 
-      <section className="shell review-section" id="reviews">
-        <div className="review-heading">
-          <span className="section-index">03</span>
-          <div>
-            <span className="kicker">RATINGS &amp; REVIEWS</span>
-            <h2>
-              Experience the product.
-              <br />
-              <em>Then tell it honestly.</em>
-            </h2>
-          </div>
-          <p>
-            Reviews are published only after the customer and product experience are confirmed.
-            No paid or unverified ratings are displayed.
-          </p>
-        </div>
+      <HighlightsStrip highlights={product.highlights} />
+      <AboutProduct about={product.about} />
+      <ProductSpecifications
+        product={product}
+        selectedVariantId={selectedVariantId}
+        onSelectVariant={selectVariant}
+      />
+      {product.videos?.length > 0 && (
+        <VideoShowcase videos={product.videos} reviewPrompt={product.reviewPrompt} />
+      )}
+      <VerifiedReviews reviews={product.reviews} />
+      <ProcessSection content={product.howItWorks} />
+      <ProcessSection content={product.howToUse} variant="dark" />
 
-        <div className="review-grid">
-          <div className="review-score-card">
-            <span className="kicker">VERIFIED RATING</span>
-            <div className="review-score">
-              <strong>—</strong>
-              <span>/ 5</span>
+      {faqs.length > 0 && (
+        <section className="faq-section">
+          <div className="shell faq-layout">
+            <div className="faq-heading">
+              <span className="kicker">COMMON QUESTIONS</span>
+              <h2>
+                Before the
+                <br />
+                <em>first flame.</em>
+              </h2>
+              <p>Need a detail that is not covered here? Send the product name with your question.</p>
+              <ArrowLink to={whatsApp} external outline>
+                ASK ON WHATSAPP
+              </ArrowLink>
             </div>
-            <div className="review-score-stars" aria-label="No verified rating yet">
-              {[1, 2, 3, 4, 5].map((value) => (
-                <Star key={value} size={23} />
-              ))}
-            </div>
-            <p>No verified reviews yet.</p>
-          </div>
-
-          <div className="review-invite">
-            <MessageCircle size={28} />
-            <span className="kicker">USED THIS PRODUCT?</span>
-            <h3>Share your ESFIRE experience.</h3>
-            <p>
-              Choose a rating and send your feedback directly to our team. Your selection is not
-              submitted until you continue on WhatsApp.
-            </p>
-            <fieldset className="rating-picker" aria-label={`Rate ${product.name}`}>
-              <legend>Choose a star rating</legend>
-              {[1, 2, 3, 4, 5].map((value) => (
-                <label
-                  className={value <= rating ? 'is-active' : ''}
-                  key={value}
-                >
-                  <input
-                    type="radio"
-                    name={`${product.slug}-rating`}
-                    value={value}
-                    checked={rating === value}
-                    onChange={() => setRating(value)}
-                    aria-label={`${value} star${value === 1 ? '' : 's'}`}
-                  />
-                  <Star size={30} />
-                </label>
-              ))}
-            </fieldset>
-            <div className="review-action">
-              <span>{rating ? `${rating} / 5 SELECTED` : 'SELECT A STAR RATING'}</span>
-              {rating > 0 && (
-                <ArrowLink to={reviewWhatsApp} external>
-                  SEND REVIEW
-                </ArrowLink>
-              )}
-            </div>
-            <div className="review-trust-note">
-              <ShieldCheck size={17} /> Feedback is checked before it is published.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="faq-section">
-        <div className="shell faq-layout">
-          <div className="faq-heading">
-            <span className="section-index">04</span>
-            <span className="kicker">COMMON QUESTIONS</span>
-            <h2>
-              Before the
-              <br />
-              <em>first flame.</em>
-            </h2>
-            <p>Need a detail that is not covered here? Send the product name with your question.</p>
-            <ArrowLink to={whatsApp} external outline>
-              ASK ON WHATSAPP
-            </ArrowLink>
-          </div>
-          <div className="faq-list">
-            {faqs.map(([question, answer], index) => {
-              const isOpen = openFaq === index;
-              const answerId = `${product.slug}-faq-${index}`;
-
-              return (
-                <article className={`faq-item${isOpen ? ' is-open' : ''}`} key={question}>
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaq(isOpen ? -1 : index)}
-                    aria-expanded={isOpen}
-                    aria-controls={answerId}
-                  >
-                    <span>0{index + 1}</span>
-                    <strong>{question}</strong>
-                    <ChevronDown size={20} />
-                  </button>
-                  <div className="faq-answer" id={answerId} hidden={!isOpen}>
-                    <div>
-                      <p>{answer}</p>
+            <div className="faq-list">
+              {faqs.map(([question, answer], index) => {
+                const isOpen = openFaq === index;
+                const answerId = `${product.slug}-faq-${index}`;
+                const installationCopy =
+                  index === 4 && product.installation_support_line
+                    ? `${answer} ${product.installation_support_line}`
+                    : answer;
+                return (
+                  <article className={`faq-item${isOpen ? ' is-open' : ''}`} key={question}>
+                    <button
+                      type="button"
+                      onClick={() => handleFaqToggle(index, question)}
+                      aria-expanded={isOpen}
+                      aria-controls={answerId}
+                    >
+                      <span>{String(index + 1).padStart(2, '0')}</span>
+                      <strong>{question}</strong>
+                      <ChevronDown size={20} aria-hidden="true" />
+                    </button>
+                    <div className="faq-answer" id={answerId} hidden={!isOpen}>
+                      <div>
+                        <p>{installationCopy}</p>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              );
-            })}
+                  </article>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="shell related-section">
         <div className="related-heading">
           <div>
-            <span className="kicker">05 / RELATED PRODUCTS</span>
+            <span className="kicker">RELATED PRODUCTS</span>
             <h2>
               Keep exploring
               <br />
@@ -431,6 +637,24 @@ function ProductDetails({ product }) {
           ))}
         </div>
       </section>
-    </>
+
+      {product.mobileActions && (
+        <nav className="mobile-action-bar" aria-label={`${product.name} actions`}>
+          <a
+            href={whatsApp}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => track('whatsapp_click', { size: sizeNumber, location: 'sticky' })}
+          >
+            WHATSAPP
+          </a>
+          {whatsappNumber && (
+            <a href={`tel:+${whatsappNumber}`}>
+              <Phone size={16} aria-hidden="true" /> CALL
+            </a>
+          )}
+        </nav>
+      )}
+    </div>
   );
 }
