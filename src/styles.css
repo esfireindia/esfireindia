@@ -774,3 +774,219 @@ h1 em, h2 em { color: var(--orange); font-style: normal; }
   .collection-panel { width: 100%; min-height: 100svh; height: auto; }
   .collection-product-panel { height: 100svh; }
 }
+
+/* Our Craft — product-specific engineering story */
+.craft-page { --craft-bg: #070707; --craft-panel: #0e0e0d; --craft-line: rgba(255,255,255,.13); --craft-muted: #aaa59c; overflow: hidden; background: var(--craft-bg); color: #f3efe7; }
+.craft-page .kicker { color: #f06a20; }
+.craft-hero { position: relative; min-height: 88svh; padding: 185px 0 95px; display: flex; align-items: end; isolation: isolate; border-bottom: 1px solid var(--craft-line); }
+.craft-hero::before { content: ''; position: absolute; inset: 0; z-index: -2; background: radial-gradient(circle at 78% 30%, rgba(229,87,11,.12), transparent 30%), linear-gradient(135deg, #12110f 0, #070707 70%); }
+.craft-hero-grid, .craft-diagram-grid { position: absolute; inset: 0; z-index: -1; opacity: .22; background-image: linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px); background-size: 48px 48px; mask-image: linear-gradient(to bottom, transparent, black 22%, black 72%, transparent); }
+.craft-hero-inner > .kicker { display: block; margin-bottom: 34px; }
+.craft-hero h1 { max-width: 1120px; margin: 0; font-size: clamp(5rem, 9.5vw, 10.8rem); line-height: .82; text-wrap: balance; }
+.craft-hero h1 em { display: block; }
+.craft-hero-support { margin-top: 72px; display: grid; grid-template-columns: minmax(0, .8fr) minmax(500px, 1.2fr); gap: 9vw; align-items: end; }
+.craft-hero-support > p { max-width: 640px; margin: 0; color: #b3aea5; font-size: 1.07rem; line-height: 1.8; }
+.craft-equation { display: flex; align-items: center; justify-content: flex-end; gap: 12px; overflow-x: auto; padding-bottom: 5px; color: #8f8a82; font: 600 .58rem JetBrains, monospace; letter-spacing: .13em; white-space: nowrap; }
+.craft-equation span { display: inline-flex; align-items: center; gap: 12px; }
+.craft-equation b { color: var(--orange); font-size: 1rem; font-weight: 400; }
+.craft-selector { position: sticky; top: 0; z-index: 25; border-bottom: 1px solid var(--craft-line); background: rgba(7,7,7,.9); backdrop-filter: blur(18px); }
+.craft-selector-scroll { display: grid; grid-template-columns: repeat(3, 1fr); }
+.craft-selector button { min-height: 86px; padding: 0 28px; display: flex; align-items: center; gap: 18px; border: 0; border-right: 1px solid var(--craft-line); background: transparent; color: #8d8981; font: 600 .65rem JetBrains, monospace; letter-spacing: .13em; text-align: left; cursor: pointer; transition: background .25s ease, color .25s ease, box-shadow .25s ease; }
+.craft-selector button:first-child { border-left: 1px solid var(--craft-line); }
+.craft-selector button > span { color: #5e5a54; }
+.craft-selector button:hover, .craft-selector button:focus-visible { color: #f7f2e9; background: rgba(255,255,255,.035); }
+.craft-selector button:focus-visible { outline: 2px solid var(--orange); outline-offset: -3px; }
+.craft-selector button.is-active { color: white; background: rgba(229,87,11,.075); box-shadow: inset 0 -3px 0 var(--orange); }
+.craft-selector button.is-active > span { color: var(--orange); }
+.craft-experience { animation: craftExperienceIn .5s ease both; }
+@keyframes craftExperienceIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.craft-engineering { padding: 115px 0 130px; border-bottom: 1px solid var(--craft-line); }
+.craft-engineering-grid { display: grid; grid-template-columns: minmax(320px, .72fr) minmax(0, 1.28fr); gap: clamp(40px, 6vw, 100px); align-items: center; }
+.craft-engineering-copy { min-width: 0; }
+.craft-engineering-copy h2 { max-width: 610px; margin: 24px 0 28px; font-size: clamp(4.2rem, 6.5vw, 7.4rem); }
+.craft-engineering-copy > p { max-width: 570px; margin: 0; color: var(--craft-muted); font-size: 1rem; line-height: 1.8; }
+.craft-layer-controls { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--craft-line); border-left: 1px solid var(--craft-line); }
+.craft-layer-controls button { min-height: 54px; padding: 0 17px; display: flex; align-items: center; gap: 11px; border: 0; border-right: 1px solid var(--craft-line); border-bottom: 1px solid var(--craft-line); background: transparent; color: #8e8981; font: 600 .56rem JetBrains, monospace; letter-spacing: .13em; cursor: pointer; transition: color .2s ease, background .2s ease; }
+.craft-layer-controls button > span { width: 7px; height: 7px; border: 1px solid currentColor; border-radius: 50%; }
+.craft-layer-controls button:hover, .craft-layer-controls button:focus-visible, .craft-layer-controls button.is-active { color: #fff; background: rgba(229,87,11,.09); }
+.craft-layer-controls button.is-active > span { border-color: var(--orange); background: var(--orange); box-shadow: 0 0 0 4px rgba(229,87,11,.13); }
+.craft-layer-controls button:focus-visible { outline: 2px solid var(--orange); outline-offset: -3px; }
+.craft-diagram-legend { margin-top: 25px; display: flex; flex-wrap: wrap; gap: 18px; color: #706d67; font: 600 .49rem JetBrains, monospace; letter-spacing: .1em; text-transform: uppercase; }
+.craft-diagram-legend span { display: flex; align-items: center; gap: 8px; }
+.craft-diagram-legend i { width: 22px; height: 2px; display: inline-block; background: #b7b1a6; }
+.craft-diagram-legend .is-air { background: #efb17c; }
+.craft-diagram-legend .is-fire { height: 6px; background: #e5570b; }
+.craft-diagram-legend .is-gas { background: repeating-linear-gradient(90deg, #dc6c31 0 5px, transparent 5px 8px); }
+.craft-diagram-legend .is-heat { height: 3px; border-block: 1px solid #e5570b; background: transparent; }
+.craft-diagram-panel { position: relative; min-width: 0; overflow: hidden; border: 1px solid var(--craft-line); background: #090909; box-shadow: 0 35px 80px rgba(0,0,0,.28); isolation: isolate; }
+.craft-diagram-panel::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 80px rgba(0,0,0,.65); }
+.craft-engineering-svg { position: relative; z-index: 2; width: 100%; height: auto; display: block; }
+.craft-diagram-structure, .craft-energy-layer { transition: opacity .35s ease, filter .35s ease; }
+.craft-engineering-svg[data-focus='airflow'] .craft-energy-layer--airflow, .craft-engineering-svg[data-focus='combustion'] .craft-energy-layer--combustion, .craft-engineering-svg[data-focus='heat'] .craft-energy-layer--heat, .craft-engineering-svg[data-focus='exhaust'] .craft-energy-layer--exhaust { opacity: 1; filter: none; }
+.craft-engineering-svg[data-focus='airflow'] .craft-energy-layer:not(.craft-energy-layer--airflow), .craft-engineering-svg[data-focus='combustion'] .craft-energy-layer:not(.craft-energy-layer--combustion), .craft-engineering-svg[data-focus='heat'] .craft-energy-layer:not(.craft-energy-layer--heat), .craft-engineering-svg[data-focus='exhaust'] .craft-energy-layer:not(.craft-energy-layer--exhaust) { opacity: .13; filter: saturate(.25); }
+.craft-flow-lines { color: #efb17c; stroke-dasharray: 13 8; animation: craftFlow 5s linear infinite; }
+.craft-heat-lines { animation: craftHeat 3.8s ease-in-out infinite alternate; transform-origin: center; }
+.craft-flame { animation: craftFlame 3.5s ease-in-out infinite alternate; transform-origin: center bottom; }
+.craft-flame--secondary { animation-delay: -1.2s; }
+.craft-leader { fill: none; stroke: #817c74; stroke-width: 1.25; }
+.craft-diagram-label { fill: #c7c1b7; font: 600 12px JetBrains, monospace; letter-spacing: 1.2px; }
+.craft-diagram-label--accent { fill: #ef7533; }
+.craft-diagram-caption { position: absolute; z-index: 3; right: 20px; bottom: 18px; color: #6d6962; font: 600 .48rem JetBrains, monospace; letter-spacing: .13em; }
+.craft-mobile-diagram-labels { display: none; }
+@keyframes craftFlow { to { stroke-dashoffset: -84; } }
+@keyframes craftHeat { from { opacity: .55; } to { opacity: 1; } }
+@keyframes craftFlame { from { transform: scale(.985, .96); filter: brightness(.9); } to { transform: scale(1.015, 1.035); filter: brightness(1.1); } }
+.craft-section { padding: 125px 0; border-bottom: 1px solid var(--craft-line); }
+.craft-mechanism { background: #0b0b0a; }
+.craft-mechanism-intro { display: grid; grid-template-columns: .34fr 1fr .72fr; gap: 5vw; align-items: end; margin-bottom: 65px; }
+.craft-mechanism-intro h2 { margin: 0; font-size: clamp(4rem, 6.5vw, 7.2rem); }
+.craft-mechanism-intro > p { margin: 0; color: var(--craft-muted); line-height: 1.8; }
+.craft-mechanism-steps { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--craft-line); border-left: 1px solid var(--craft-line); }
+.craft-mechanism-steps article { min-height: 280px; padding: 27px; display: flex; flex-direction: column; border-right: 1px solid var(--craft-line); border-bottom: 1px solid var(--craft-line); }
+.craft-mechanism-steps article > span { color: var(--orange); font: 600 .58rem JetBrains, monospace; letter-spacing: .12em; }
+.craft-mechanism-steps h3 { margin: auto 0 15px; font-size: clamp(1.7rem, 2.4vw, 2.7rem); }
+.craft-mechanism-steps p { margin: 0; color: #99948c; font-size: .86rem; line-height: 1.7; }
+.craft-practical-note, .craft-engineering-callout { display: grid; grid-template-columns: .35fr 1.65fr; gap: 4vw; padding: 26px 28px; border: 1px solid var(--craft-line); border-top: 0; }
+.craft-practical-note { border-left: 3px solid var(--orange); background: #131210; }
+.craft-engineering-callout { margin-top: 18px; border-top: 1px solid var(--craft-line); background: rgba(229,87,11,.055); }
+.craft-practical-note > span, .craft-engineering-callout > span { color: var(--orange); font: 600 .57rem JetBrains, monospace; letter-spacing: .13em; }
+.craft-practical-note p, .craft-engineering-callout p { margin: 0; color: #aaa59d; font-size: .9rem; line-height: 1.75; }
+.craft-section-heading { display: grid; grid-template-columns: .35fr 1fr .65fr; gap: 5vw; align-items: end; margin-bottom: 60px; }
+.craft-section-heading h2 { margin: 0; font-size: clamp(4rem, 6.3vw, 7rem); }
+.craft-section-heading p { margin: 0; color: var(--craft-muted); line-height: 1.7; }
+.craft-anatomy { background: #090909; }
+.craft-anatomy-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr); border: 1px solid var(--craft-line); }
+.craft-anatomy-visual { position: relative; min-height: 670px; overflow: hidden; background: #dedbd4; }
+.craft-anatomy-visual::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle, transparent 44%, rgba(0,0,0,.14)); pointer-events: none; }
+.craft-anatomy-visual img { height: 100%; object-fit: contain; }
+.craft-anatomy-marker { position: absolute; z-index: 2; width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid white; border-radius: 50%; background: var(--orange); color: white; font: 700 .52rem JetBrains, monospace; box-shadow: 0 5px 18px rgba(0,0,0,.32); transform: translate(-50%, -50%); }
+.craft-anatomy-list { margin: 0; padding: 0; display: grid; list-style: none; }
+.craft-anatomy-list li { min-height: 82px; padding: 18px 22px; display: flex; align-items: center; gap: 22px; border-bottom: 1px solid var(--craft-line); }
+.craft-anatomy-list li:last-child { border-bottom: 0; }
+.craft-anatomy-list span { color: var(--orange); font: 600 .55rem JetBrains, monospace; }
+.craft-anatomy-list strong { color: #d7d2c9; font-size: .85rem; font-weight: 500; }
+.craft-geometry { background: #0e0e0d; }
+.craft-geometry-grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(350px, .92fr); align-items: stretch; }
+.craft-geometry-image { min-height: 680px; overflow: hidden; }
+.craft-geometry-image img { height: 100%; object-fit: cover; }
+.craft-geometry-copy { padding: clamp(40px, 7vw, 105px); display: flex; flex-direction: column; justify-content: center; border: 1px solid var(--craft-line); border-left: 0; }
+.craft-geometry-copy h2 { margin: 28px 0 32px; font-size: clamp(4rem, 6vw, 7rem); }
+.craft-geometry-copy p { max-width: 650px; margin: 0; color: var(--craft-muted); font-size: 1.03rem; line-height: 1.85; }
+.craft-geometry-signoff { margin-top: 80px; color: #5e5b55; font: 600 .56rem JetBrains, monospace; letter-spacing: .18em; }
+.craft-timeline-section { background: #070707; }
+.craft-timeline-section > .shell > h2 { max-width: 950px; margin: 22px 0 58px; font-size: clamp(4rem, 6.7vw, 7.3rem); }
+.craft-timeline { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--craft-line); border-left: 1px solid var(--craft-line); }
+.craft-timeline button { position: relative; min-height: 95px; padding: 19px; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 12px; border: 0; border-right: 1px solid var(--craft-line); border-bottom: 1px solid var(--craft-line); background: transparent; color: #858179; font: 600 .57rem JetBrains, monospace; letter-spacing: .11em; cursor: pointer; }
+.craft-timeline button::after { content: ''; position: absolute; left: -1px; right: 100%; bottom: -1px; height: 2px; background: var(--orange); transition: right .3s ease; }
+.craft-timeline button span { color: #5d5953; }
+.craft-timeline button:hover, .craft-timeline button:focus-visible, .craft-timeline button.is-active { color: white; background: rgba(255,255,255,.025); }
+.craft-timeline button.is-active::after { right: -1px; }
+.craft-timeline button.is-active span { color: var(--orange); }
+.craft-timeline button:focus-visible { outline: 2px solid var(--orange); outline-offset: -3px; }
+.craft-timeline-detail { min-height: 230px; padding: 42px; display: grid; grid-template-columns: .22fr 1fr; gap: 5vw; align-items: center; border: 1px solid var(--craft-line); border-top: 0; background: linear-gradient(110deg, rgba(229,87,11,.1), transparent 55%); }
+.craft-timeline-detail > span { color: var(--orange); font: 600 .65rem JetBrains, monospace; }
+.craft-timeline-detail h3 { margin: 0 0 16px; font-size: clamp(2.7rem, 4vw, 4.6rem); }
+.craft-timeline-detail p { max-width: 720px; margin: 0; color: var(--craft-muted); line-height: 1.8; }
+.craft-real-media { background: #11110f; color: #f3efe7; border-bottom: 1px solid var(--craft-line); }
+.craft-real-media .video-showcase-heading > p { color: #8f8a82; }
+.craft-real-media .video-review-line { border-color: var(--craft-line); color: #8f8a82; }
+.craft-safety { background: #0c0c0b; }
+.craft-safety-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 9vw; }
+.craft-safety h2 { max-width: 680px; margin: 25px 0 0; font-size: clamp(3.8rem, 6vw, 6.8rem); }
+.craft-safety ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--craft-line); }
+.craft-safety li { padding: 22px 10px 22px 38px; position: relative; border-bottom: 1px solid var(--craft-line); color: #aaa59d; line-height: 1.75; }
+.craft-safety li::before { content: '—'; position: absolute; left: 8px; color: var(--orange); }
+.craft-product-cta { padding: 95px 0; background: var(--orange); color: white; }
+.craft-product-cta .kicker { color: rgba(255,255,255,.7); }
+.craft-product-cta-inner { display: grid; grid-template-columns: 1.3fr .7fr; gap: 5vw; align-items: end; }
+.craft-product-cta h2 { max-width: 900px; margin: 20px 0 0; font-size: clamp(3.8rem, 6vw, 6.8rem); }
+.craft-product-cta .button-row { justify-content: flex-end; }
+.craft-product-cta .arrow-link--light { border-color: #11110f; background: #11110f; color: white; }
+.craft-product-cta .arrow-link--light.arrow-link--outline { border-color: rgba(17,17,15,.45); background: transparent; color: #11110f; }
+.craft-product-cta .arrow-link:hover { border-color: white; background: white; color: #11110f; }
+.craft-manufacturing { padding: 130px 0; background: #f1eee7; color: var(--ink); }
+.craft-manufacturing-heading { display: grid; grid-template-columns: .32fr 1fr .68fr; gap: 5vw; align-items: end; margin-bottom: 62px; }
+.craft-manufacturing-heading h2 { margin: 0; font-size: clamp(4rem, 6.5vw, 7.2rem); }
+.craft-manufacturing-heading p { margin: 0; color: var(--muted); line-height: 1.75; }
+.craft-manufacturing-grid { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.craft-manufacturing-grid article { min-height: 260px; padding: 24px; display: flex; flex-direction: column; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.craft-manufacturing-grid article > span { color: var(--orange); font: 600 .58rem JetBrains, monospace; }
+.craft-manufacturing-grid h3 { margin: auto 0 14px; font-size: 2rem; }
+.craft-manufacturing-grid p { margin: 0; color: var(--muted); font-size: .82rem; line-height: 1.65; }
+.craft-workshop-proof { margin-top: 70px; display: grid; grid-template-columns: 1.2fr .8fr; background: var(--ink); color: white; }
+.craft-workshop-proof video { width: 100%; height: 570px; object-fit: cover; background: #090909; }
+.craft-workshop-proof > div { padding: clamp(40px, 6vw, 85px); display: flex; flex-direction: column; justify-content: center; }
+.craft-workshop-proof h3 { margin: 25px 0; font-size: clamp(3rem, 4.5vw, 5rem); }
+.craft-workshop-proof p { margin: 0; color: #aaa59d; line-height: 1.8; }
+
+@media (max-width: 1100px) {
+  .craft-hero-support, .craft-manufacturing-heading, .craft-mechanism-intro, .craft-section-heading { grid-template-columns: 1fr; gap: 24px; }
+  .craft-equation { justify-content: flex-start; }
+  .craft-engineering-grid { grid-template-columns: 1fr; }
+  .craft-engineering-copy { display: grid; grid-template-columns: 1fr 1fr; column-gap: 45px; }
+  .craft-engineering-copy .kicker, .craft-engineering-copy h2 { grid-column: 1 / -1; }
+  .craft-layer-controls { margin-top: 0; }
+  .craft-diagram-legend { grid-column: 2; }
+  .craft-mechanism-steps { grid-template-columns: 1fr 1fr; }
+  .craft-anatomy-visual { min-height: 560px; }
+  .craft-geometry-grid, .craft-workshop-proof { grid-template-columns: 1fr; }
+  .craft-geometry-image { min-height: 600px; }
+  .craft-geometry-copy { border-left: 1px solid var(--craft-line); border-top: 0; }
+  .craft-safety-grid, .craft-product-cta-inner { grid-template-columns: 1fr; }
+  .craft-product-cta .button-row { justify-content: flex-start; }
+  .craft-manufacturing-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 760px) {
+  .craft-hero { min-height: auto; padding: 155px 0 72px; }
+  .craft-hero h1 { font-size: clamp(4.2rem, 20vw, 6.4rem); }
+  .craft-hero-support { margin-top: 48px; }
+  .craft-equation { margin-inline: -20px; padding: 0 20px 8px; }
+  .craft-selector-scroll { display: flex; width: calc(100% - 24px); overflow-x: auto; scroll-snap-type: x mandatory; }
+  .craft-selector button { min-width: 245px; padding: 0 20px; scroll-snap-align: start; }
+  .craft-engineering, .craft-section, .craft-manufacturing { padding-block: 82px; }
+  .craft-engineering-copy { display: block; }
+  .craft-engineering-copy h2 { font-size: clamp(3.7rem, 16vw, 5.2rem); }
+  .craft-layer-controls { margin-top: 34px; }
+  .craft-diagram-legend { margin-bottom: 8px; }
+  .craft-diagram-label, .craft-leader { display: none; }
+  .craft-diagram-caption { right: 12px; bottom: 10px; font-size: .42rem; }
+  .craft-mobile-diagram-labels { margin: -1px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--craft-line); border-left: 1px solid var(--craft-line); list-style: none; }
+  .craft-mobile-diagram-labels li { padding: 13px; border-right: 1px solid var(--craft-line); border-bottom: 1px solid var(--craft-line); color: #8f8a82; font: 600 .48rem/1.45 JetBrains, monospace; letter-spacing: .08em; text-transform: uppercase; }
+  .craft-mechanism-intro h2, .craft-section-heading h2, .craft-geometry-copy h2, .craft-timeline-section > .shell > h2, .craft-safety h2, .craft-product-cta h2, .craft-manufacturing-heading h2 { font-size: clamp(3.35rem, 14.8vw, 5rem); }
+  .craft-mechanism-steps { grid-template-columns: 1fr; }
+  .craft-mechanism-steps article { min-height: 235px; }
+  .craft-practical-note, .craft-engineering-callout { grid-template-columns: 1fr; gap: 15px; }
+  .craft-anatomy-grid { grid-template-columns: 1fr; }
+  .craft-anatomy-visual { min-height: 430px; }
+  .craft-anatomy-list { grid-template-columns: 1fr 1fr; }
+  .craft-anatomy-list li { min-height: 74px; padding: 14px; gap: 12px; border-right: 1px solid var(--craft-line); }
+  .craft-geometry-image { min-height: 450px; }
+  .craft-geometry-copy { padding: 40px 26px; }
+  .craft-geometry-signoff { margin-top: 48px; }
+  .craft-timeline { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .craft-timeline button { min-width: 155px; scroll-snap-align: start; }
+  .craft-timeline-detail { min-height: 270px; padding: 28px 22px; grid-template-columns: 1fr; gap: 26px; }
+  .craft-real-media .video-showcase-heading h2 { font-size: 3.45rem; }
+  .craft-product-cta .button-row { align-items: stretch; flex-direction: column; }
+  .craft-product-cta .arrow-link { width: 100%; }
+  .craft-manufacturing-grid { grid-template-columns: 1fr; }
+  .craft-manufacturing-grid article { min-height: 210px; }
+  .craft-workshop-proof { margin-top: 48px; }
+  .craft-workshop-proof video { height: 470px; }
+  .craft-workshop-proof > div { padding: 38px 24px; }
+}
+
+@media (max-width: 520px) {
+  .craft-layer-controls { grid-template-columns: 1fr; }
+  .craft-anatomy-visual { min-height: 340px; }
+  .craft-anatomy-marker { width: 28px; height: 28px; font-size: .45rem; }
+  .craft-anatomy-list { grid-template-columns: 1fr; }
+  .craft-geometry-image { min-height: 360px; }
+  .craft-workshop-proof video { height: 400px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .craft-experience, .craft-flow-lines, .craft-heat-lines, .craft-flame { animation: none !important; }
+  .craft-energy-layer, .craft-selector button, .craft-timeline button::after { transition: none; }
+}

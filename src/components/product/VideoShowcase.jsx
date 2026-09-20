@@ -218,7 +218,13 @@ function VideoCard({ video, activeId, activate, deactivate, hoverCapable, reduce
   );
 }
 
-export function VideoShowcase({ videos, reviewPrompt }) {
+export function VideoShowcase({
+  videos,
+  reviewPrompt,
+  eyebrow = 'LIVE VIDEOS',
+  heading = 'See it live.',
+  className = '',
+}) {
   const [activeId, setActiveId] = useState(null);
   const hoverCapable = useMediaQuery('(hover: hover) and (pointer: fine)');
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
@@ -237,11 +243,11 @@ export function VideoShowcase({ videos, reviewPrompt }) {
   }, []);
 
   return (
-    <section className="video-showcase">
+    <section className={`video-showcase${className ? ` ${className}` : ''}`}>
       <div className="shell video-showcase-heading">
         <div>
-          <span className="kicker">LIVE VIDEOS</span>
-          <h2>See it live.</h2>
+          <span className="kicker">{eyebrow}</span>
+          <h2>{heading}</h2>
         </div>
         <p>{hoverCapable ? 'Hover to preview. Click for sound.' : 'Tap to play.'}</p>
       </div>
