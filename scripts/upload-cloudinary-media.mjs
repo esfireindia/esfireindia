@@ -26,7 +26,15 @@ const imageExtensions = new Set(['.avif', '.gif', '.jpeg', '.jpg', '.png', '.web
 const videoExtensions = new Set(['.mov', '.mp4', '.webm']);
 
 async function walk(directory) {
-  const entries = await readdir(directory, { withFileTypes: true });
+  let entries;
+
+  try {
+    entries = await readdir(directory, { withFileTypes: true });
+  } catch (error) {
+    if (error.code === 'ENOENT') return [];
+    throw error;
+  }
+
   const files = await Promise.all(
     entries.map((entry) => {
       const location = path.join(directory, entry.name);
@@ -46,6 +54,11 @@ const allFiles = (await Promise.all(sourceDirs.map(walk)))
   .sort();
 
 console.log(`Uploading ${allFiles.length} media files to Cloudinary...`);
+
+if (allFiles.length === 0) {
+  console.log('No local image or video files were found.');
+  process.exit(0);
+}
 
 let uploadedImages = 0;
 let uploadedVideos = 0;
