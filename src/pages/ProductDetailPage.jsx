@@ -1,5 +1,14 @@
-import { ArrowLeft, Check, ChevronDown, MessageCircle, ShieldCheck, Star } from 'lucide-react';
-import { useState } from 'react';
+import {
+  ArrowLeft,
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  MessageCircle,
+  ShieldCheck,
+  Star,
+} from 'lucide-react';
+import { useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ProductCard } from '../components/product/ProductCard';
 import { ArrowLink } from '../components/ui/ArrowLink';
@@ -44,8 +53,17 @@ function ProductDetails({ product }) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [openFaq, setOpenFaq] = useState(0);
   const [rating, setRating] = useState(0);
+  const touchStartX = useRef(null);
+  const suppressGalleryClick = useRef(false);
 
-  const images = [product.image, product.alternateImage];
+  const images = product.gallery?.length
+    ? product.gallery
+    : [product.image, product.alternateImage].filter(Boolean);
+  const thumbnailStart = Math.min(
+    Math.max(selectedImage - 1, 0),
+    Math.max(images.length - 3, 0),
+  );
+  const visibleThumbnails = images.slice(thumbnailStart, thumbnailStart + 3);
   const productIndex = products.findIndex((item) => item.slug === product.slug);
   const relatedProducts = [...products.slice(productIndex + 1), ...products.slice(0, productIndex)]
     .filter((item) => item.slug !== product.slug)
@@ -57,6 +75,45 @@ function ProductDetails({ product }) {
   const reviewWhatsApp = createWhatsAppUrl(
     `Hi ES Fire India, I'd like to share a ${rating}-star review for ${product.name}.`,
   );
+  const showPreviousImage = () => {
+    setSelectedImage((current) => (current - 1 + images.length) % images.length);
+  };
+  const showNextImage = () => {
+    setSelectedImage((current) => (current + 1) % images.length);
+  };
+  const handleGalleryKeyDown = (event) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      showPreviousImage();
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      showNextImage();
+    }
+  };
+  const handleTouchStart = (event) => {
+    touchStartX.current = event.touches[0]?.clientX ?? null;
+    suppressGalleryClick.current = false;
+  };
+  const handleTouchEnd = (event) => {
+    if (touchStartX.current === null) return;
+
+    const touchEndX = event.changedTouches[0]?.clientX ?? touchStartX.current;
+    const distance = touchEndX - touchStartX.current;
+    touchStartX.current = null;
+
+    if (Math.abs(distance) < 45) return;
+    suppressGalleryClick.current = true;
+    if (distance < 0) showNextImage();
+    else showPreviousImage();
+  };
+  const handleGalleryClick = () => {
+    if (suppressGalleryClick.current) {
+      suppressGalleryClick.current = false;
+      return;
+    }
+    showNextImage();
+  };
 
   return (
     <>
@@ -65,21 +122,73 @@ function ProductDetails({ product }) {
           <ArrowLeft size={15} /> BACK TO COLLECTION
         </Link>
         <div className="product-gallery">
-          <div className="gallery-main">
-            <img src={images[selectedImage]} alt={`${product.name} product view`} />
-            <span>0{selectedImage + 1} / 02</span>
-          </div>
-          <div className="gallery-thumbs">
-            {images.map((image, index) => (
+          <div
+            className="gallery-main"
+          >
+            <img
+              key={images[selectedImage]}
+              src={images[selectedImage]}
+              alt={`${product.name} product view ${selectedImage + 1} of ${images.length}`}
+              draggable="false"
+            />
+            {images.length > 1 && (
               <button
                 type="button"
-                className={selectedImage === index ? 'active' : ''}
-                onClick={() => setSelectedImage(index)}
-                key={image}
-              >
-                <img src={image} alt={`${product.name} thumbnail ${index + 1}`} />
-              </button>
-            ))}
+                className="gallery-swipe-surface"
+                onClick={handleGalleryClick}
+                onKeyDown={handleGalleryKeyDown}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                aria-label={`${product.name} image ${selectedImage + 1} of ${images.length}. Click or swipe for the next image; use the arrow keys to browse.`}
+              />
+            )}
+            {images.length > 1 && (
+              <div className="gallery-arrows">
+                <button
+                  type="button"
+                  onClick={showPreviousImage}
+                  aria-label={`Show previous ${product.name} image`}
+                >
+                  <ChevronLeft size={22} aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  onClick={showNextImage}
+                  aria-label={`Show next ${product.name} image`}
+                >
+                  <ChevronRight size={22} aria-hidden="true" />
+                </button>
+              </div>
+            )}
+            <span>
+              {String(selectedImage + 1).padStart(2, '0')} / {String(images.length).padStart(2, '0')}
+            </span>
+          </div>
+          <div
+            className="gallery-thumbs"
+            style={{ '--thumb-count': Math.min(visibleThumbnails.length, 3) }}
+          >
+            {visibleThumbnails.map((image, offset) => {
+              const index = thumbnailStart + offset;
+
+              return (
+                <button
+                  type="button"
+                  className={selectedImage === index ? 'active' : ''}
+                  onClick={() => setSelectedImage(index)}
+                  key={image}
+                  aria-label={`Show ${product.name} image ${index + 1}`}
+                  aria-current={selectedImage === index ? 'true' : undefined}
+                >
+                  <img
+                    src={image}
+                    alt=""
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    draggable="false"
+                  />
+                </button>
+              );
+            })}
           </div>
         </div>
         <div className="product-summary">

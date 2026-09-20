@@ -8,8 +8,16 @@ export const products = [
     cardCopy: 'A view into the fire, designed for cooking and warmth.',
     description:
       'A glass-front fire experience that makes the flame part of the room. Fireview brings a considered silhouette, direct heat and a clear connection to the cooking fire.',
-    image: '/assets/fireview.avif',
-    alternateImage: '/assets/compact-fire.avif',
+    image: '/assets/fireview-01.png',
+    alternateImage: '/assets/fireview-02.png',
+    gallery: [
+      '/assets/fireview-01.png',
+      '/assets/fireview-02.png',
+      '/assets/fireview-03.png',
+      '/assets/fireview-04.png',
+      '/assets/fireview-05.png',
+      '/assets/fireview-06.png',
+    ],
     applications: ['Indoor living', 'Cooking', 'Hospitality'],
     specs: [
       ['Material', 'Blackened steel / glass'],
