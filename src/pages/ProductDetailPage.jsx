@@ -53,6 +53,7 @@ function ProductDetails({ product }) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [openFaq, setOpenFaq] = useState(0);
   const [rating, setRating] = useState(0);
+  const [selectedVariantId, setSelectedVariantId] = useState(product.variants?.[0]?.id ?? null);
   const touchStartX = useRef(null);
   const suppressGalleryClick = useRef(false);
 
@@ -64,13 +65,17 @@ function ProductDetails({ product }) {
     Math.max(images.length - 3, 0),
   );
   const visibleThumbnails = images.slice(thumbnailStart, thumbnailStart + 3);
+  const selectedVariant = product.variants?.find((variant) => variant.id === selectedVariantId);
   const productIndex = products.findIndex((item) => item.slug === product.slug);
   const relatedProducts = [...products.slice(productIndex + 1), ...products.slice(0, productIndex)]
     .filter((item) => item.slug !== product.slug)
     .slice(0, 3);
   const faqs = getProductFaqs(product);
+  const selectedVariantMessage = selectedVariant
+    ? ` I have selected ${selectedVariant.label}: ${selectedVariant.width} width, ${selectedVariant.length} length, ${selectedVariant.height} height, ${selectedVariant.weight} weight.`
+    : '';
   const whatsApp = createWhatsAppUrl(
-    `Hi ES Fire India, I'm interested in ${product.name}. Please share more details.`,
+    `Hi ES Fire India, I'm interested in ${product.name}.${selectedVariantMessage} Please share more details.`,
   );
   const reviewWhatsApp = createWhatsAppUrl(
     `Hi ES Fire India, I'd like to share a ${rating}-star review for ${product.name}.`,
@@ -122,9 +127,7 @@ function ProductDetails({ product }) {
           <ArrowLeft size={15} /> BACK TO COLLECTION
         </Link>
         <div className="product-gallery">
-          <div
-            className="gallery-main"
-          >
+          <div className="gallery-main">
             <img
               key={images[selectedImage]}
               src={images[selectedImage]}
@@ -205,6 +208,47 @@ function ProductDetails({ product }) {
             BE THE FIRST TO REVIEW
           </a>
           <p>{product.description}</p>
+          {product.variants?.length > 0 && (
+            <fieldset className="variant-selector">
+              <legend>
+                <span className="kicker">AVAILABLE SIZES</span>
+                <strong>Choose your size</strong>
+              </legend>
+              <div className="variant-options">
+                {product.variants.map((variant) => {
+                  const isSelected = variant.id === selectedVariantId;
+
+                  return (
+                    <label
+                      className={`variant-option${isSelected ? ' is-selected' : ''}`}
+                      key={variant.id}
+                    >
+                      <input
+                        type="radio"
+                        name={`${product.slug}-size`}
+                        value={variant.id}
+                        checked={isSelected}
+                        onChange={() => setSelectedVariantId(variant.id)}
+                      />
+                      <span className="variant-option-heading">
+                        <span>{variant.label}</span>
+                        <span className="variant-check" aria-hidden="true">
+                          <Check size={13} />
+                        </span>
+                      </span>
+                      <strong>
+                        {variant.width} W × {variant.length} L × {variant.height} H
+                      </strong>
+                      <small>WEIGHT / {variant.weight}</small>
+                    </label>
+                  );
+                })}
+              </div>
+              <p className="variant-selection-note" aria-live="polite">
+                SELECTED / {selectedVariant?.label.toUpperCase()} — {selectedVariant?.weight}
+              </p>
+            </fieldset>
+          )}
           <div className="button-row">
             <ArrowLink to={whatsApp} external>
               ENQUIRE ON WHATSAPP

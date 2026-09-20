@@ -18,12 +18,30 @@ export const products = [
       '/assets/fireview-05.png',
       '/assets/fireview-06.png',
     ],
+    variants: [
+      {
+        id: 'size-01',
+        label: 'Size 01',
+        height: '21 in',
+        width: '22 in',
+        length: '17.5 in',
+        weight: '70 kg',
+      },
+      {
+        id: 'size-02',
+        label: 'Size 02',
+        height: '22 in',
+        width: '16 in',
+        length: '17 in',
+        weight: '65 kg',
+      },
+    ],
     applications: ['Indoor living', 'Cooking', 'Hospitality'],
     specs: [
       ['Material', 'Blackened steel / glass'],
-      ['Fuel', 'To be confirmed'],
-      ['Finish', 'To be confirmed'],
-      ['Dimensions', 'To be confirmed'],
+      ['Size 01', '22 W × 17.5 L × 21 H in'],
+      ['Size 02', '16 W × 17 L × 22 H in'],
+      ['Weight', '70 kg / 65 kg'],
     ],
   },
   {
