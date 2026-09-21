@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { whatsappBase } from '../../data/products';
 import { mediaUrl } from '../../utils/media';
+import { SeoManager } from '../SeoManager';
 import { CursorFollower } from '../motion/CursorFollower';
 import { MotionController } from '../motion/MotionController';
 
@@ -205,6 +206,7 @@ export function SiteLayout({ children }) {
 
   return (
     <>
+      <SeoManager />
       <MotionController />
       <CursorFollower />
       <div className="page-transition" aria-hidden="true">

@@ -28,7 +28,7 @@ export function ContactPage() {
     const payload = Object.fromEntries(new FormData(form).entries());
     const whatsappUrl = createWhatsAppUrl(
       [
-        'Hi ES Fire India, I have a website enquiry.',
+        'Hi Esfire India, I have a website enquiry.',
         `Name: ${payload.name}`,
         `Email: ${payload.email}`,
         `Phone: ${payload.phone || 'Not provided'}`,

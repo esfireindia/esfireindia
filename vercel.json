@@ -5,6 +5,16 @@
       "source": "/api/:path*",
       "destination": "https://esfireindia.onrender.com/api/:path*"
     },
+    { "source": "/products", "destination": "/products/index.html" },
+    { "source": "/products/fireview-tandoor", "destination": "/products/fireview-tandoor/index.html" },
+    { "source": "/products/smokeless-bonfire-18", "destination": "/products/smokeless-bonfire-18/index.html" },
+    { "source": "/products/flatpack-rocket-stove", "destination": "/products/flatpack-rocket-stove/index.html" },
+    { "source": "/craft", "destination": "/craft/index.html" },
+    { "source": "/applications", "destination": "/applications/index.html" },
+    { "source": "/about", "destination": "/about/index.html" },
+    { "source": "/contact", "destination": "/contact/index.html" },
+    { "source": "/terms-and-conditions", "destination": "/terms-and-conditions/index.html" },
+    { "source": "/privacy-policy", "destination": "/privacy-policy/index.html" },
     {
       "source": "/(.*)",
       "destination": "/index.html"

@@ -16,15 +16,15 @@ export function AboutPage() {
         label="ABOUT ESFIRE INDIA"
         title="We build"
         accent="around fire."
-        copy="ESFIRE INDIA is a fire-product brand combining practical fire experiences with modern fabrication and product design."
+        copy="Esfire India is a fire-product manufacturer based in Jalandhar, Punjab, combining practical fire experiences with modern fabrication and product design."
       />
       <section className="shell about-grid">
         <div className="about-statement">
           <h2>A fire product should feel as considered before the flame as it does after.</h2>
           <p>
-            We’re starting with a focused family of tandoors, fire stoves, bonfire pits and compact
-            fire solutions. No inflated claims — just a clear ambition to make fire objects that
-            work hard and live well.
+            Based in Jalandhar, Punjab, we build a focused family of fire stoves, bonfire pits and
+            compact cooking stoves for homes and outdoor spaces across India. No inflated claims —
+            just a clear ambition to make fire objects that work hard and live well.
           </p>
         </div>
         <div className="about-tiles">

@@ -13,7 +13,7 @@ import {
   Wind,
   Wrench,
 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ProductCard } from '../components/product/ProductCard';
 import { VideoShowcase } from '../components/product/VideoShowcase';
@@ -67,39 +67,6 @@ function hasRealValue(value) {
   if (!value) return false;
   const normalized = String(value).trim().toLowerCase();
   return !['to be confirmed', 'tbc', 'static frontend catalogue'].includes(normalized);
-}
-
-function ProductSeo({ product, images }) {
-  useEffect(() => {
-    if (!product.seo) return undefined;
-
-    const previousTitle = document.title;
-    const meta = document.querySelector('meta[name="description"]');
-    const previousDescription = meta?.getAttribute('content') || '';
-    document.title = product.seo.title;
-    if (meta) meta.setAttribute('content', product.seo.description);
-
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.id = `${product.slug}-product-schema`;
-    script.textContent = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: product.name,
-      description: product.seo.description,
-      image: images.map((item) => new URL(item.src, window.location.origin).toString()),
-      brand: { '@type': 'Brand', name: 'ESFIRE INDIA' },
-    });
-    document.head.appendChild(script);
-
-    return () => {
-      document.title = previousTitle;
-      if (meta) meta.setAttribute('content', previousDescription);
-      script.remove();
-    };
-  }, [images, product]);
-
-  return null;
 }
 
 function HighlightsStrip({ highlights }) {
@@ -395,7 +362,6 @@ function ProductDetails({ product }) {
 
   return (
     <div className="product-page">
-      <ProductSeo product={product} images={images} />
       <section className="shell product-detail">
         <Link className="back-link" to="/products">
           <ArrowLeft size={15} /> BACK TO COLLECTION

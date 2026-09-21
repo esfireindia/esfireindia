@@ -20,8 +20,8 @@ export function ProductsPage() {
             <em>collection.</em>
           </h1>
           <p>
-            Purpose-built products for cooking, warming, gathering and moving through the outdoors.
-            Explore the complete ESFIRE collection.
+            Purpose-built fire stoves, bonfire pits and cooking stoves from Esfire India in
+            Jalandhar, Punjab. Explore the complete collection for cooking, warmth and the outdoors.
           </p>
         </div>
       </section>

@@ -9,7 +9,7 @@
     "dev": "concurrently -k -n CLIENT,SERVER -c yellow,red \"npm:dev:client\" \"npm:dev:server\"",
     "dev:client": "vite --host 0.0.0.0",
     "dev:server": "nodemon server/index.js",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender-seo.mjs",
     "start": "node server/index.js",
     "media:upload": "node scripts/upload-cloudinary-media.mjs",
     "lint": "oxlint",

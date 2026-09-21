@@ -212,7 +212,7 @@ export const products = resolveMediaPaths([
     ],
     reviews: [],
     seo: {
-      title: 'Fireview Tandoor | Smokeless Glass-Front Wood Stove | ESFIRE INDIA',
+      title: 'Fireview Tandoor | Glass-Front Wood Stove | Esfire India',
       description:
         'Cast iron and glass smokeless wood stove in two sizes. Watch the flame, feel the heat. Ready to order with delivery all over India.',
     },
@@ -420,7 +420,7 @@ export const products = resolveMediaPaths([
     ],
     reviews: [],
     seo: {
-      title: 'Smokeless Bonfire Pit | Portable Wood Fire Pit | ESFIRE INDIA',
+      title: 'Smokeless Bonfire Pit | Outdoor Fire Pit | Esfire India',
       description:
         'Portable double-wall smokeless wood fire pit, 18 inch across, with 360 degree airflow, almost zero smoke and easy cleanup. Ideal for backyards, lawns and outdoor gatherings.',
     },
@@ -624,7 +624,7 @@ export const products = resolveMediaPaths([
     ],
     reviews: [],
     seo: {
-      title: 'Flatpack Rocket Stove | Portable Wood Stove for Camping | ESFIRE INDIA',
+      title: 'Flatpack Rocket Stove | Camping Wood Stove | Esfire India',
       description:
         'A portable black steel wood-burning rocket stove that dismantles flat and packs into the carry bag included. No tools needed. Built for road trips and camping. Delivery all over India.',
     },
@@ -639,7 +639,7 @@ export function createWhatsAppUrl(message) {
 }
 
 export const whatsappBase = createWhatsAppUrl(
-  "Hi ES Fire India, I'm interested in your fire products. Please share more details.",
+  "Hi Esfire India, I'm interested in your fire products. Please share more details.",
 );
 
 export const applicationOptions = resolveMediaPaths([
