@@ -90,15 +90,14 @@ export function getStructuredData(pathname) {
   const product = seo.product;
   return [organization, website, {
     '@context': 'https://schema.org',
-    '@type': 'Product',
-    '@id': `${seo.url}#product`,
+    '@type': 'WebPage',
+    '@id': `${seo.url}#webpage`,
+    url: seo.url,
     name: product.name,
     description: seo.description,
-    image: product.gallery.map(({ src }) => src),
-    brand: { '@type': 'Brand', name: brandName },
-    manufacturer: { '@id': organization['@id'] },
-    category: product.category,
-    url: seo.url,
+    primaryImageOfPage: seo.image,
+    isPartOf: { '@id': website['@id'] },
+    publisher: { '@id': organization['@id'] },
   }, {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
